@@ -7,6 +7,8 @@ import { CustomPasswordComponent } from '../../shared/components/custom-password
 import { CustomSelectComponent } from '../../shared/components/custom-select/custom-select.component';
 import type { SelectOption } from '../../shared/components/custom-select/custom-select.component';
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
+import { ToastComponent } from '../../shared/components/toast/toast.component';
+import { LoadingOverlayComponent } from '../../shared/components/loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,9 @@ import { CustomButtonComponent } from '../../shared/components/custom-button/cus
     CustomInputComponent,
     CustomPasswordComponent,
     CustomSelectComponent,
-    CustomButtonComponent
+    CustomButtonComponent,
+    ToastComponent,
+    LoadingOverlayComponent
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
@@ -26,10 +30,14 @@ import { CustomButtonComponent } from '../../shared/components/custom-button/cus
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   captchaText: string = '';
+  captchaHash: string = '';
+  captchaImageUrl: string = '';
   randomFieldName1: string = '';
   randomFieldName2: string = '';
   isLoading: boolean = false;
-  showSuccess: boolean = false;
+  showToast: boolean = false;
+  toastMessage: string = '';
+  toastType: 'success' | 'error' = 'success';
 
   states: SelectOption[] = [
     { label: 'Select State', value: null },
@@ -73,12 +81,74 @@ export class LoginComponent implements OnInit {
   }
 
   refreshCaptcha() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed confusing chars like I, O, 0, 1
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let result = '';
     for (let i = 0; i < 5; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     this.captchaText = result;
+    this.captchaHash = this.generateHash(result);
+    this.generateCaptchaImage(result);
+  }
+
+  private generateCaptchaImage(text: string): void {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    
+    canvas.width = 140;
+    canvas.height = 50;
+    
+    // Background with noise
+    ctx.fillStyle = '#f0f0f0';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Add noise dots
+    for (let i = 0; i < 50; i++) {
+      ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.3)`;
+      ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
+    }
+    
+    // Add noise lines
+    for (let i = 0; i < 5; i++) {
+      ctx.strokeStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.4)`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.stroke();
+    }
+    
+    // Draw text with distortion
+    ctx.font = 'bold 20px Times New Roman';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const x = 20 + (i * 20) + (Math.random() - 0.5) * 10;
+      const y = 25 + (Math.random() - 0.5) * 8;
+      const rotation = (Math.random() - 0.5) * 0.4;
+      
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.fillStyle = `rgba(${Math.random() * 100}, ${Math.random() * 100}, ${Math.random() * 100}, 0.8)`;
+      ctx.fillText(char, 0, 0);
+      ctx.restore();
+    }
+    
+    this.captchaImageUrl = canvas.toDataURL('image/png');
+  }
+
+  private generateHash(text: string): string {
+    // Simple hash function for demo (in real app, use server-side)
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+      const char = text.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString(36);
   }
 
   onSubmit() {
@@ -87,7 +157,8 @@ export class LoginComponent implements OnInit {
       return;
     }
     
-    if (this.loginForm.value.captcha.toUpperCase() !== this.captchaText) {
+    const inputHash = this.generateHash(this.loginForm.value.captcha.toUpperCase());
+    if (inputHash !== this.captchaHash) {
       this.loginForm.get('captcha')?.setErrors({ 'incorrect': true });
       this.loginForm.get('captcha')?.markAsTouched();
       return;
@@ -98,7 +169,9 @@ export class LoginComponent implements OnInit {
     // Simulate API call
     setTimeout(() => {
       this.isLoading = false;
-      this.showSuccess = true;
+      this.showToast = true;
+      this.toastMessage = 'Login successful! Redirecting to dashboard...';
+      this.toastType = 'success';
       
       setTimeout(() => {
         console.log('Login successful!', {
@@ -106,7 +179,7 @@ export class LoginComponent implements OnInit {
           state: this.loginForm.value.state
         });
         // Navigate to dashboard
-      }, 1500);
+      }, 2000);
     }, 2000);
   }
 
@@ -128,10 +201,15 @@ export class LoginComponent implements OnInit {
       return null; // Let required validator handle empty values
     }
     
-    if (control.value.toUpperCase() !== this.captchaText) {
+    const inputHash = this.generateHash(control.value.toUpperCase());
+    if (inputHash !== this.captchaHash) {
       return { 'incorrect': true };
     }
     
     return null;
+  }
+
+  onToastClose(): void {
+    this.showToast = false;
   }
 }

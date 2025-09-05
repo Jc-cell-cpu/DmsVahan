@@ -6,3 +6,5 @@ export { CustomButtonComponent } from './custom-button/custom-button.component';
 export { CustomCardComponent } from './custom-card/custom-card.component';
 export { AppHeaderComponent } from './app-header/app-header.component';
 export { AppFooterComponent } from './app-footer/app-footer.component';
+export { ToastComponent } from './toast/toast.component';
+export { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';

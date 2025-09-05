@@ -1,11 +1,5 @@
 <div class="login-container">
   <custom-card class="login-card">
-    <div slot="header" class="login-header">
-      <i class="pi pi-car"></i>
-      <h1 class="login-title">DMS Vahan</h1>
-      <p class="login-subtitle">Document Management System</p>
-    </div>
-
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate autocomplete="nope" data-form-type="other">
       <!-- Multiple fake inputs to confuse Chrome -->
       <input type="text" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="username">
@@ -90,8 +84,8 @@
           Security Code
         </label>
         <div class="captcha-container">
-          <div class="captcha-display" role="img" [attr.aria-label]="'Security code: ' + captchaText">
-            <span class="captcha-text" [attr.data-text]="captchaText">{{ captchaText }}</span>
+          <div class="captcha-display" role="img" [attr.aria-label]="'Security code image'">
+            <img [src]="captchaImageUrl" alt="Security Code" class="captcha-image" draggable="false">
           </div>
           <custom-button
             type="button"
@@ -144,14 +138,14 @@
         </custom-button>
       </div>
     </form>
-    
-    <!-- Success Message -->
-    <div *ngIf="showSuccess" class="success-overlay">
-      <div class="success-message">
-        <i class="pi pi-check-circle"></i>
-        <h3>Login Successful!</h3>
-        <p>Redirecting to dashboard...</p>
-      </div>
-    </div>
   </custom-card>
+  
+  <app-loading-overlay [show]="isLoading"></app-loading-overlay>
+  
+  <app-toast 
+    [show]="showToast" 
+    [message]="toastMessage" 
+    [type]="toastType"
+    (closed)="onToastClose()">
+  </app-toast>
 </div>

@@ -92,11 +92,12 @@
   transition: background-color 0.2s;
 
   &:hover {
-    background: #f8f9fa;
+    background: rgba(59, 130, 246, 0.1);
+    color: #1e40af;
   }
 
   &.selected {
-    background: #007ad9;
+    background: #3b82f6;
     color: #fff;
   }
 

@@ -60,46 +60,35 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-container {
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1.25rem;
+    padding: 0.5rem 1rem;
+    justify-content: center;
   }
   
   .header-left {
-    order: 1;
+    flex: none;
   }
   
   .header-center {
-    order: 2;
-    padding: 0;
+    display: none;
   }
   
   .header-right {
-    order: 3;
-    width: auto;
-  }
-  
-  .heading-image {
-    max-height: 70px;
-  }
-  
-  .emblem-placeholder {
-    width: 100px;
-    height: 100px;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-container {
-    padding: 1rem 0.75rem;
+    display: none;
   }
   
   .emblem-placeholder {
     width: 80px;
     height: 80px;
   }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0.4rem 0.75rem;
+  }
   
-  .heading-image {
-    max-height: 60px;
+  .emblem-placeholder {
+    width: 70px;
+    height: 70px;
   }
 }

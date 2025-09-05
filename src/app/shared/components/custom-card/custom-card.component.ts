@@ -7,9 +7,9 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="card">
-      <div class="card-header" *ngIf="hasHeaderContent">
+      <!-- <div class="card-header" *ngIf="hasHeaderContent">
         <ng-content select="[slot=header]"></ng-content>
-      </div>
+      </div> -->
       <div class="card-body">
         <ng-content></ng-content>
       </div>

@@ -1,0 +1,54 @@
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(116, 130, 162, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #3b82f6 20%, 
+    #6366f1 40%, 
+    #8b5cf6 60%, 
+    #a855f7 80%, 
+    transparent 100%);
+  background-size: 300% 100%;
+  animation: loadingSlide 1.8s infinite linear;
+}
+
+@keyframes loadingSlide {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loading-bar {
+    height: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-bar {
+    height: 2px;
+  }
+  
+  .loading-overlay {
+    backdrop-filter: blur(1px);
+  }
+}
