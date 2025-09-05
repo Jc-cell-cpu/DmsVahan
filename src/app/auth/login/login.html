@@ -1,0 +1,146 @@
+<div class="login-container">
+  <p-card class="login-card">
+    <ng-template pTemplate="header">
+      <div class="login-header">
+        <i class="pi pi-car"></i>
+        <h1 class="login-title">DMS Vahan</h1>
+        <p class="login-subtitle">Document Management System</p>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+      <!-- User ID -->
+      <div class="field">
+        <label for="userId" class="field-label">
+          <i class="pi pi-user"></i>
+          User ID
+        </label>
+        <input 
+          id="userId"
+          type="text"
+          pInputText 
+          formControlName="userId" 
+          class="full-width"
+          placeholder="Enter your User ID"
+          autocomplete="username"
+          [attr.aria-describedby]="loginForm.get('userId')?.invalid && loginForm.get('userId')?.touched ? 'userId-error' : null" />
+        @if (loginForm.get('userId')?.touched && loginForm.get('userId')?.invalid) {
+          <small id="userId-error" class="error-message" role="alert">
+            <i class="pi pi-exclamation-triangle"></i>
+            User ID is required (minimum 3 characters)
+          </small>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <label for="password" class="field-label">
+          <i class="pi pi-lock"></i>
+          Password
+        </label>
+        <p-password 
+          id="password"
+          formControlName="password" 
+          [toggleMask]="true"
+          styleClass="full-width"
+          inputStyleClass="full-width"
+          placeholder="Enter your password"
+          [feedback]="false"
+          autocomplete="current-password"
+          [attr.aria-describedby]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched ? 'password-error' : null">
+        </p-password>
+        @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+          <small id="password-error" class="error-message" role="alert">
+            <i class="pi pi-exclamation-triangle"></i>
+            Password is required (minimum 6 characters)
+          </small>
+        }
+      </div>
+
+      <!-- State -->
+      <div class="field">
+        <label for="state" class="field-label">
+          <i class="pi pi-map-marker"></i>
+          Select State
+        </label>
+        <p-select
+          id="state"
+          [options]="states"
+          formControlName="state"
+          placeholder="Choose your state"
+          styleClass="full-width"
+          [attr.aria-describedby]="loginForm.get('state')?.invalid && loginForm.get('state')?.touched ? 'state-error' : null">
+        </p-select>
+        @if (loginForm.get('state')?.touched && loginForm.get('state')?.invalid) {
+          <small id="state-error" class="error-message" role="alert">
+            <i class="pi pi-exclamation-triangle"></i>
+            Please select a state
+          </small>
+        }
+      </div>
+
+      <!-- Captcha -->
+      <div class="field">
+        <label for="captcha" class="field-label">
+          <i class="pi pi-shield"></i>
+          Security Code
+        </label>
+        <div class="captcha-container">
+          <div class="captcha-display" role="img" [attr.aria-label]="'Security code: ' + captchaText">
+            <span class="captcha-text">{{ captchaText }}</span>
+          </div>
+          <p-button
+            type="button"
+            icon="pi pi-refresh"
+            severity="secondary"
+            size="small"
+            (click)="refreshCaptcha()"
+            pTooltip="Generate new security code"
+            tooltipPosition="top"
+            [attr.aria-label]="'Refresh security code'">
+          </p-button>
+        </div>
+        <input 
+          id="captcha"
+          type="text"
+          pInputText 
+          formControlName="captcha" 
+          class="full-width"
+          placeholder="Enter the security code shown above"
+          autocomplete="off"
+          [attr.aria-describedby]="loginForm.get('captcha')?.invalid && loginForm.get('captcha')?.touched ? 'captcha-error' : null" />
+        @if (loginForm.get('captcha')?.touched && loginForm.get('captcha')?.invalid) {
+          <small id="captcha-error" class="error-message" role="alert">
+            <i class="pi pi-exclamation-triangle"></i>
+            @if (loginForm.get('captcha')?.errors?.['required']) {
+              Please enter the security code
+            } @else if (loginForm.get('captcha')?.errors?.['incorrect']) {
+              Security code is incorrect. Please try again.
+            }
+          </small>
+        }
+      </div>
+
+      <!-- Buttons -->
+      <div class="button-container">
+        <p-button
+          type="button"
+          label="Reset"
+          icon="pi pi-refresh"
+          severity="secondary"
+          class="reset-button"
+          (click)="onReset()"
+          [attr.aria-label]="'Reset form'">
+        </p-button>
+        <p-button
+          type="submit"
+          label="Sign In"
+          icon="pi pi-sign-in"
+          class="login-button"
+          [disabled]="loginForm.invalid"
+          [attr.aria-label]="'Sign in to DMS Vahan'">
+        </p-button>
+      </div>
+    </form>
+  </p-card>
+</div>
