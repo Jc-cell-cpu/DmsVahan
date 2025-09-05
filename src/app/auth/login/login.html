@@ -1,29 +1,35 @@
 <div class="login-container">
-  <p-card class="login-card">
-    <ng-template pTemplate="header">
-      <div class="login-header">
-        <i class="pi pi-car"></i>
-        <h1 class="login-title">DMS Vahan</h1>
-        <p class="login-subtitle">Document Management System</p>
-      </div>
-    </ng-template>
+  <custom-card class="login-card">
+    <div slot="header" class="login-header">
+      <i class="pi pi-car"></i>
+      <h1 class="login-title">DMS Vahan</h1>
+      <p class="login-subtitle">Document Management System</p>
+    </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate autocomplete="nope" data-form-type="other">
+      <!-- Multiple fake inputs to confuse Chrome -->
+      <input type="text" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="username">
+      <input type="password" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="current-password">
+      <input type="text" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="new-password">
+      <input type="email" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="email">
       <!-- User ID -->
       <div class="field">
         <label for="userId" class="field-label">
           <i class="pi pi-user"></i>
           User ID
         </label>
-        <input 
-          id="userId"
+        <custom-input
+          inputId="userId"
           type="text"
-          pInputText 
-          formControlName="userId" 
-          class="full-width"
+          formControlName="userId"
+          inputClass="full-width"
           placeholder="Enter your User ID"
-          autocomplete="username"
-          [attr.aria-describedby]="loginForm.get('userId')?.invalid && loginForm.get('userId')?.touched ? 'userId-error' : null" />
+          autocomplete="nope"
+          [attr.name]="randomFieldName1"
+          [attr.data-form-type]="'other'"
+          [attr.data-lpignore]="true"
+          [attr.aria-describedby]="loginForm.get('userId')?.invalid && loginForm.get('userId')?.touched ? 'userId-error' : null">
+        </custom-input>
         @if (loginForm.get('userId')?.touched && loginForm.get('userId')?.invalid) {
           <small id="userId-error" class="error-message" role="alert">
             <i class="pi pi-exclamation-triangle"></i>
@@ -38,17 +44,17 @@
           <i class="pi pi-lock"></i>
           Password
         </label>
-        <p-password 
-          id="password"
-          formControlName="password" 
-          [toggleMask]="true"
-          styleClass="full-width"
-          inputStyleClass="full-width"
+        <custom-password
+          inputId="password"
+          formControlName="password"
+          inputClass="full-width"
           placeholder="Enter your password"
-          [feedback]="false"
-          autocomplete="current-password"
+          autocomplete="nope"
+          [attr.name]="randomFieldName2"
+          [attr.data-form-type]="'other'"
+          [attr.data-lpignore]="true"
           [attr.aria-describedby]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched ? 'password-error' : null">
-        </p-password>
+        </custom-password>
         @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
           <small id="password-error" class="error-message" role="alert">
             <i class="pi pi-exclamation-triangle"></i>
@@ -63,14 +69,12 @@
           <i class="pi pi-map-marker"></i>
           Select State
         </label>
-        <p-select
-          id="state"
+        <custom-select
           [options]="states"
           formControlName="state"
           placeholder="Choose your state"
-          styleClass="full-width"
           [attr.aria-describedby]="loginForm.get('state')?.invalid && loginForm.get('state')?.touched ? 'state-error' : null">
-        </p-select>
+        </custom-select>
         @if (loginForm.get('state')?.touched && loginForm.get('state')?.invalid) {
           <small id="state-error" class="error-message" role="alert">
             <i class="pi pi-exclamation-triangle"></i>
@@ -87,28 +91,25 @@
         </label>
         <div class="captcha-container">
           <div class="captcha-display" role="img" [attr.aria-label]="'Security code: ' + captchaText">
-            <span class="captcha-text">{{ captchaText }}</span>
+            <span class="captcha-text" [attr.data-text]="captchaText">{{ captchaText }}</span>
           </div>
-          <p-button
+          <custom-button
             type="button"
             icon="pi pi-refresh"
-            severity="secondary"
-            size="small"
-            (click)="refreshCaptcha()"
-            pTooltip="Generate new security code"
-            tooltipPosition="top"
+            variant="secondary"
+            (buttonClick)="refreshCaptcha()"
             [attr.aria-label]="'Refresh security code'">
-          </p-button>
+          </custom-button>
         </div>
-        <input 
-          id="captcha"
+        <custom-input
+          inputId="captcha"
           type="text"
-          pInputText 
-          formControlName="captcha" 
-          class="full-width"
+          formControlName="captcha"
+          inputClass="full-width"
           placeholder="Enter the security code shown above"
           autocomplete="off"
-          [attr.aria-describedby]="loginForm.get('captcha')?.invalid && loginForm.get('captcha')?.touched ? 'captcha-error' : null" />
+          [attr.aria-describedby]="loginForm.get('captcha')?.invalid && loginForm.get('captcha')?.touched ? 'captcha-error' : null">
+        </custom-input>
         @if (loginForm.get('captcha')?.touched && loginForm.get('captcha')?.invalid) {
           <small id="captcha-error" class="error-message" role="alert">
             <i class="pi pi-exclamation-triangle"></i>
@@ -123,24 +124,34 @@
 
       <!-- Buttons -->
       <div class="button-container">
-        <p-button
+        <custom-button
           type="button"
           label="Reset"
           icon="pi pi-refresh"
-          severity="secondary"
-          class="reset-button"
-          (click)="onReset()"
+          variant="secondary"
+          buttonClass="reset-button"
+          (buttonClick)="onReset()"
           [attr.aria-label]="'Reset form'">
-        </p-button>
-        <p-button
+        </custom-button>
+        <custom-button
           type="submit"
-          label="Sign In"
-          icon="pi pi-sign-in"
-          class="login-button"
-          [disabled]="loginForm.invalid"
+          [label]="isLoading ? 'Signing In...' : 'Sign In'"
+          [icon]="isLoading ? 'pi pi-spin pi-spinner' : 'pi pi-sign-in'"
+          variant="primary"
+          buttonClass="login-button"
+          [disabled]="loginForm.invalid || isLoading"
           [attr.aria-label]="'Sign in to DMS Vahan'">
-        </p-button>
+        </custom-button>
       </div>
     </form>
-  </p-card>
+    
+    <!-- Success Message -->
+    <div *ngIf="showSuccess" class="success-overlay">
+      <div class="success-message">
+        <i class="pi pi-check-circle"></i>
+        <h3>Login Successful!</h3>
+        <p>Redirecting to dashboard...</p>
+      </div>
+    </div>
+  </custom-card>
 </div>

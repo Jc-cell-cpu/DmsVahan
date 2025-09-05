@@ -1,0 +1,17 @@
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #007ad9 0%, #0056b3 100%);
+  color: #fff;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.card-body {
+  padding: 0;
+}

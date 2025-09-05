@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
-import { InputText } from 'primeng/inputtext';
-import { Password } from 'primeng/password';
-import { Select } from 'primeng/select';
-import { Button } from 'primeng/button';
-import { Tooltip } from 'primeng/tooltip';
+import { CustomCardComponent } from '../../shared/components/custom-card/custom-card.component';
+import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
+import { CustomPasswordComponent } from '../../shared/components/custom-password/custom-password.component';
+import { CustomSelectComponent } from '../../shared/components/custom-select/custom-select.component';
+import type { SelectOption } from '../../shared/components/custom-select/custom-select.component';
+import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +14,11 @@ import { Tooltip } from 'primeng/tooltip';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    Card,
-    InputText,
-    Password,
-    Select,
-    Button,
-    Tooltip
+    CustomCardComponent,
+    CustomInputComponent,
+    CustomPasswordComponent,
+    CustomSelectComponent,
+    CustomButtonComponent
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
@@ -27,8 +26,12 @@ import { Tooltip } from 'primeng/tooltip';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   captchaText: string = '';
+  randomFieldName1: string = '';
+  randomFieldName2: string = '';
+  isLoading: boolean = false;
+  showSuccess: boolean = false;
 
-  states = [
+  states: SelectOption[] = [
     { label: 'Select State', value: null },
     { label: 'Delhi', value: 'DL' },
     { label: 'Maharashtra', value: 'MH' },
@@ -43,6 +46,9 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.randomFieldName1 = 'field_' + Math.random().toString(36).substring(2, 15);
+    this.randomFieldName2 = 'field_' + Math.random().toString(36).substring(2, 15);
+    
     this.loginForm = this.fb.group({
       userId: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -51,10 +57,28 @@ export class LoginComponent implements OnInit {
     });
 
     this.refreshCaptcha();
+    
+    // Delay to prevent Chrome autofill detection
+    setTimeout(() => {
+      this.disableAutofill();
+    }, 100);
+  }
+
+  private disableAutofill(): void {
+    const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+    inputs.forEach((input: any) => {
+      input.setAttribute('autocomplete', 'nope');
+      input.setAttribute('data-form-type', 'other');
+    });
   }
 
   refreshCaptcha() {
-    this.captchaText = Math.random().toString(36).substring(2, 7).toUpperCase();
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed confusing chars like I, O, 0, 1
+    let result = '';
+    for (let i = 0; i < 5; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    this.captchaText = result;
   }
 
   onSubmit() {
@@ -69,14 +93,21 @@ export class LoginComponent implements OnInit {
       return;
     }
     
-    // Simulate login process
-    console.log('Login successful!', {
-      userId: this.loginForm.value.userId,
-      state: this.loginForm.value.state
-    });
+    this.isLoading = true;
     
-    // Here you would typically call an authentication service
-    // this.authService.login(this.loginForm.value).subscribe(...);
+    // Simulate API call
+    setTimeout(() => {
+      this.isLoading = false;
+      this.showSuccess = true;
+      
+      setTimeout(() => {
+        console.log('Login successful!', {
+          userId: this.loginForm.value.userId,
+          state: this.loginForm.value.state
+        });
+        // Navigate to dashboard
+      }, 1500);
+    }, 2000);
   }
 
   onReset() {
