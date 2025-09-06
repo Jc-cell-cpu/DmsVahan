@@ -20,13 +20,62 @@ export class DocumentConfigComponent implements OnInit {
   selectedState = 'Andaman & Nicobar Island';
   
   menuItems: MenuItem[] = [
-    { icon: 'pi pi-folder', label: 'Document Config', active: true },
-    { icon: 'pi pi-file', label: 'Document Upload' },
-    { icon: 'pi pi-search', label: 'Document Search' },
-    { icon: 'pi pi-cog', label: 'System Settings' },
-    { icon: 'pi pi-users', label: 'User Management' },
-    { icon: 'pi pi-chart-bar', label: 'Reports' },
-    { icon: 'pi pi-sign-out', label: 'Logout' }
+    {
+      icon: 'pi pi-folder',
+      label: 'Document Configuration',
+      expanded: true,
+      children: [
+        {
+          icon: 'pi pi-car',
+          label: 'Vahan Related',
+          active: true
+        },
+        {
+          icon: 'pi pi-file-edit',
+          label: 'Permit Related',
+          expanded: false,
+          children: [
+            { icon: 'pi pi-file', label: 'Permit' },
+            { icon: 'pi pi-cog', label: 'Permit Category Configuration' }
+          ]
+        },
+        {
+          icon: 'pi pi-briefcase',
+          label: 'Trade Certificate Related'
+        },
+        {
+          icon: 'pi pi-shop',
+          label: 'Dealer End Related'
+        }
+      ]
+    },
+    {
+      icon: 'pi pi-plus',
+      label: 'Addition of Document Category'
+    },
+    {
+      icon: 'pi pi-plus-circle',
+      label: 'Addition of Document Sub-Category'
+    },
+    {
+      icon: 'pi pi-link',
+      label: 'Addition of Category to Sub-Category'
+    },
+    {
+      icon: 'pi pi-eye',
+      label: 'View Assign Document'
+    },
+    {
+      icon: 'pi pi-wrench',
+      label: 'DMS Utility',
+      children: [
+        { icon: 'pi pi-search', label: 'Document View By Application No.' }
+      ]
+    },
+    {
+      icon: 'pi pi-sign-out',
+      label: 'Logout'
+    }
   ];
 
   transactionPurposes: SelectOption[] = [

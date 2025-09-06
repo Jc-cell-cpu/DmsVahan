@@ -2,10 +2,12 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface MenuItem {
-  icon: string;
+  icon?: string;
   label: string;
   route?: string;
   active?: boolean;
+  children?: MenuItem[];
+  expanded?: boolean;
 }
 
 @Component({
@@ -26,6 +28,10 @@ export class SidebarComponent {
   }
 
   onMenuItemClick(item: MenuItem): void {
-    this.menuItemClick.emit(item);
+    if (item.children && item.children.length > 0) {
+      item.expanded = !item.expanded;
+    } else {
+      this.menuItemClick.emit(item);
+    }
   }
 }

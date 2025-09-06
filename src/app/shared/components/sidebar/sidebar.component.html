@@ -11,15 +11,50 @@
   
   <nav class="sidebar-nav">
     <ul class="nav-list">
-      <li *ngFor="let item of menuItems" 
-          class="nav-item" 
-          [class.active]="item.active">
+      <li *ngFor="let item of menuItems" class="nav-item">
         <a href="#" 
            class="nav-link" 
+           [class.active]="item.active"
+           [class.has-children]="item.children && item.children.length > 0"
            (click)="onMenuItemClick(item); $event.preventDefault()">
-          <i [class]="item.icon"></i>
+          <i *ngIf="item.icon" [class]="item.icon"></i>
           <span>{{ item.label }}</span>
+          <i *ngIf="item.children && item.children.length > 0" 
+             class="pi pi-chevron-down expand-icon"
+             [class.expanded]="item.expanded"></i>
         </a>
+        
+        <ul *ngIf="item.children && item.children.length > 0 && item.expanded" 
+            class="sub-nav-list">
+          <li *ngFor="let child of item.children" 
+              class="sub-nav-item"
+              [class.active]="child.active">
+            <a href="#" 
+               class="sub-nav-link" 
+               [class.has-children]="child.children && child.children.length > 0"
+               (click)="onMenuItemClick(child); $event.preventDefault()">
+              <i *ngIf="child.icon" [class]="child.icon"></i>
+              <span>{{ child.label }}</span>
+              <i *ngIf="child.children && child.children.length > 0" 
+                 class="pi pi-chevron-down expand-icon"
+                 [class.expanded]="child.expanded"></i>
+            </a>
+            
+            <ul *ngIf="child.children && child.children.length > 0 && child.expanded" 
+                class="sub-sub-nav-list">
+              <li *ngFor="let subChild of child.children" 
+                  class="sub-sub-nav-item"
+                  [class.active]="subChild.active">
+                <a href="#" 
+                   class="sub-sub-nav-link" 
+                   (click)="onMenuItemClick(subChild); $event.preventDefault()">
+                  <i *ngIf="subChild.icon" [class]="subChild.icon"></i>
+                  <span>{{ subChild.label }}</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>
