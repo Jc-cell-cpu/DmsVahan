@@ -212,14 +212,12 @@
   padding: 0.875rem;
   justify-content: center;
   
-  i {
+  i:first-child {
     margin-right: 0;
   }
   
   span, .expand-icon {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
+    display: none;
   }
 }
 
@@ -289,6 +287,10 @@
 
 .sidebar.collapsed .sub-nav-list {
   display: none;
+}
+
+.sidebar.collapsed .nav-item {
+  display: block;
 }
 
 .sub-sub-nav-list {

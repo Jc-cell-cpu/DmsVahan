@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 export interface MenuItem {
   icon?: string;
@@ -23,6 +24,8 @@ export class SidebarComponent {
   @Output() toggleSidebar = new EventEmitter<void>();
   @Output() menuItemClick = new EventEmitter<MenuItem>();
 
+  constructor(private router: Router) {}
+
   onToggle(): void {
     this.toggleSidebar.emit();
   }
@@ -31,6 +34,9 @@ export class SidebarComponent {
     if (item.children && item.children.length > 0) {
       item.expanded = !item.expanded;
     } else {
+      if (item.route) {
+        this.router.navigate([item.route]);
+      }
       this.menuItemClick.emit(item);
     }
   }

@@ -28,6 +28,7 @@ export class DocumentConfigComponent implements OnInit {
         {
           icon: 'pi pi-car',
           label: 'Vahan Related',
+          route: '/document-config',
           active: true
         },
         {
@@ -35,7 +36,7 @@ export class DocumentConfigComponent implements OnInit {
           label: 'Permit Related',
           expanded: false,
           children: [
-            { icon: 'pi pi-file', label: 'Permit' },
+            { icon: 'pi pi-file', label: 'Permit', route: '/permit-config' },
             { icon: 'pi pi-cog', label: 'Permit Category Configuration' }
           ]
         },

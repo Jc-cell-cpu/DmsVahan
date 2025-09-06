@@ -1,0 +1,192 @@
+<div class="dashboard-layout">
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+    <i class="pi pi-bars"></i>
+  </button>
+  
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+  
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isOpen]="sidebarOpen"
+    [menuItems]="menuItems"
+    (toggleSidebar)="toggleSidebar()"
+    (menuItemClick)="onMenuItemClick($event)">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Content Area -->
+    <div class="content-area">
+      <div class="content-card">
+        <div class="card-header">
+          <div class="section-header">
+            <h2 class="section-title">Permit Related</h2>
+            <app-state-badge [stateName]="selectedState"></app-state-badge>
+          </div>
+        </div>
+
+        <!-- Alert Notice -->
+        <div *ngIf="showAlert" class="alert-notice">
+          <div class="alert-content">
+            <i class="pi pi-exclamation-triangle"></i>
+            <div class="alert-text">
+              <strong>Please Note:</strong> All mandatory fields marked with asterisk (*) must be filled before submission. 
+              Ensure all permit types and document configurations are properly set for your state.
+            </div>
+            <button class="alert-close" (click)="dismissAlert()">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Configuration Form -->
+        <form [formGroup]="configForm" (ngSubmit)="onSubmit()" class="config-form">
+          <div class="form-grid">
+            <!-- Row 1 -->
+            <div class="form-field">
+              <label for="transactionPurpose" class="field-label">
+                Transaction Purpose <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="transactionPurposes"
+                formControlName="transactionPurpose"
+                placeholder="Select Transaction Purpose">
+              </custom-select>
+              <small *ngIf="configForm.get('transactionPurpose')?.touched && configForm.get('transactionPurpose')?.invalid" 
+                     class="error-message">
+                Transaction Purpose is required
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="vehicleType" class="field-label">Vehicle Type</label>
+              <custom-select
+                [options]="vehicleTypes"
+                formControlName="vehicleType"
+                placeholder="Select Vehicle Type">
+              </custom-select>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="form-field">
+              <label for="transportType" class="field-label">
+                Transport Type <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="transportTypes"
+                formControlName="transportType"
+                placeholder="Select Transport Type">
+              </custom-select>
+              <small *ngIf="configForm.get('transportType')?.touched && configForm.get('transportType')?.invalid" 
+                     class="error-message">
+                Transport Type is required
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="documentType" class="field-label">
+                Document Type <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="documentTypes"
+                formControlName="documentType"
+                placeholder="Search Document Type"
+                [searchable]="true">
+              </custom-select>
+              <small *ngIf="configForm.get('documentType')?.touched && configForm.get('documentType')?.invalid" 
+                     class="error-message">
+                Document Type is required
+              </small>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="form-field">
+              <label for="permit" class="field-label">
+                Permit <span class="required">*</span>
+              </label>
+              <div class="multi-select-container">
+                <div class="multi-select-input" (click)="togglePermitDropdown()">
+                  <div class="selected-permits" *ngIf="getSelectedPermits().length > 0">
+                    <span *ngFor="let permit of getSelectedPermits()" class="permit-tag">
+                      {{ permit }}
+                      <i class="pi pi-times" (click)="removePermit(permit, $event)"></i>
+                    </span>
+                  </div>
+                  <span *ngIf="getSelectedPermits().length === 0" class="placeholder">Select Permits</span>
+                  <i class="pi pi-chevron-down dropdown-icon" [class.open]="permitDropdownOpen"></i>
+                </div>
+                <div class="multi-select-dropdown" *ngIf="permitDropdownOpen">
+                  <label *ngFor="let permit of permits" class="dropdown-option">
+                    <input 
+                      type="checkbox" 
+                      [checked]="isPermitSelected(permit.value)"
+                      (change)="onPermitChange($event, permit.value)">
+                    <span>{{ permit.label }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="registrationType" class="field-label">Registration Type</label>
+              <custom-select
+                [options]="registrationTypes"
+                formControlName="registrationType"
+                placeholder="Select Registration Type">
+              </custom-select>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="form-field">
+              <label for="subDocumentType" class="field-label">
+                Sub Document Type <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="subDocumentTypes"
+                formControlName="subDocumentType"
+                placeholder="Search Sub Document Type"
+                [searchable]="true">
+              </custom-select>
+              <small *ngIf="configForm.get('subDocumentType')?.touched && configForm.get('subDocumentType')?.invalid" 
+                     class="error-message">
+                Sub Document Type is required
+              </small>
+            </div>
+          </div>
+
+          <!-- Checkbox Section -->
+          <div class="checkbox-section">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="acceptTerms" class="checkbox-input">
+              <span class="checkbox-text">
+                I confirm that all the information provided is accurate and I accept the terms and conditions.
+              </span>
+            </label>
+            <p class="warning-text">
+              <i class="pi pi-exclamation-triangle"></i>
+              Warning: Providing false information may result in legal action and rejection of application.
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <custom-button
+              type="button"
+              label="Cancel"
+              variant="secondary"
+              (buttonClick)="onCancel()">
+            </custom-button>
+            <custom-button
+              type="submit"
+              label="Submit Configuration"
+              variant="primary"
+              [disabled]="configForm.invalid">
+            </custom-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
