@@ -178,7 +178,7 @@ export class LoginComponent implements OnInit {
           userId: this.loginForm.value.userId,
           state: this.loginForm.value.state
         });
-        // Navigate to dashboard
+        window.location.href = '/document-config';
       }, 2000);
     }, 2000);
   }

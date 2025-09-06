@@ -1,0 +1,26 @@
+<aside class="sidebar" [class.collapsed]="!isOpen">
+  <div class="sidebar-header">
+    <button class="sidebar-expand" (click)="onToggle()">
+      <img src="/icons/sidebar.png" alt="Expand">
+    </button>
+    <h3 class="sidebar-title">DMS-Vahan</h3>
+    <button class="sidebar-close" (click)="onToggle()">
+      <i class="pi pi-angle-left"></i>
+    </button>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li *ngFor="let item of menuItems" 
+          class="nav-item" 
+          [class.active]="item.active">
+        <a href="#" 
+           class="nav-link" 
+           (click)="onMenuItemClick(item); $event.preventDefault()">
+          <i [class]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>

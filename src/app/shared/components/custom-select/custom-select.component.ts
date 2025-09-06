@@ -1,6 +1,7 @@
-import { Component, Input, forwardRef, HostListener } from '@angular/core';
+import { Component, Input, forwardRef, HostListener, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 export interface SelectOption {
   label: string;
@@ -10,7 +11,7 @@ export interface SelectOption {
 @Component({
   selector: 'custom-select',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="select-wrapper" [class.open]="isOpen" [class.disabled]="disabled">
       <div class="select-trigger" (click)="toggle()" [attr.tabindex]="disabled ? -1 : 0" (keydown)="onKeyDown($event)">
@@ -18,13 +19,26 @@ export interface SelectOption {
         <i class="pi pi-chevron-down select-arrow"></i>
       </div>
       <div class="select-dropdown" *ngIf="isOpen">
+        <div class="search-input" *ngIf="searchable">
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            placeholder="Type to search..."
+            class="search-field"
+            (click)="$event.stopPropagation()">
+          <i class="pi pi-search search-icon"></i>
+        </div>
         <div 
-          *ngFor="let option of options" 
+          *ngFor="let option of filteredOptions" 
           class="select-option"
           [class.selected]="option.value === value"
           (click)="selectOption(option)"
         >
           {{ option.label }}
+        </div>
+        <div class="no-options" *ngIf="filteredOptions.length === 0">
+          {{ searchTerm ? 'No matching options found' : 'No options available' }}
         </div>
       </div>
     </div>
@@ -38,26 +52,45 @@ export interface SelectOption {
     }
   ]
 })
-export class CustomSelectComponent implements ControlValueAccessor {
+export class CustomSelectComponent implements ControlValueAccessor, OnInit {
   @Input() options: SelectOption[] = [];
   @Input() placeholder: string = 'Select an option';
+  @Input() searchable: boolean = false;
 
   value: any = null;
   disabled: boolean = false;
   isOpen: boolean = false;
+  searchTerm: string = '';
+  filteredOptions: SelectOption[] = [];
 
   private onChange = (value: any) => {};
   private onTouched = () => {};
+
+  ngOnInit(): void {
+    this.filteredOptions = [...this.options];
+  }
 
   get selectedLabel(): string {
     const selected = this.options.find(option => option.value === this.value);
     return selected ? selected.label : '';
   }
 
+  onSearch(): void {
+    if (!this.searchTerm.trim()) {
+      this.filteredOptions = [...this.options];
+    } else {
+      this.filteredOptions = this.options.filter(option =>
+        option.label.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+  }
+
   toggle(): void {
     if (!this.disabled) {
       this.isOpen = !this.isOpen;
       if (this.isOpen) {
+        this.searchTerm = '';
+        this.filteredOptions = [...this.options];
         this.onTouched();
         setTimeout(() => this.adjustDropdownPosition(), 0);
       }
