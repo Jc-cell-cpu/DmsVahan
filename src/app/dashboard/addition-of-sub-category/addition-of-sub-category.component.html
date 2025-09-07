@@ -1,0 +1,102 @@
+<div class="dashboard-layout">
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+    <i class="pi pi-bars"></i>
+  </button>
+  
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+  
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isOpen]="sidebarOpen"
+    [menuItems]="menuItems"
+    (toggleSidebar)="toggleSidebar()"
+    (menuItemClick)="onMenuItemClick($event)">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Content Area -->
+    <div class="content-area">
+      <div class="content-card">
+        <div class="card-header">
+          <div class="section-header">
+            <h2 class="section-title">Addition of Document Sub-Category</h2>
+            <app-state-badge [stateName]="selectedState"></app-state-badge>
+          </div>
+        </div>
+
+        <!-- Alert Notice -->
+        <div *ngIf="showAlert" class="alert-notice">
+          <div class="alert-content">
+            <i class="pi pi-exclamation-triangle"></i>
+            <div class="alert-text">
+              <strong>Please Note:</strong> All mandatory fields must be filled before submission. 
+              Ensure the document sub-category information is accurate and complete.
+            </div>
+            <button class="alert-close" (click)="dismissAlert()">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Configuration Form -->
+        <form [formGroup]="configForm" (ngSubmit)="onSubmit()" class="config-form">
+          <div class="form-grid">
+            <!-- Short Name Field -->
+            <div class="form-field">
+              <label for="shortName" class="field-label">
+                Short Name of Documents <span class="required">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="shortName"
+                formControlName="shortName"
+                class="form-input"
+                placeholder="Enter short name of document">
+              <small *ngIf="configForm.get('shortName')?.touched && configForm.get('shortName')?.invalid" 
+                     class="error-message">
+                Short Name is required
+              </small>
+            </div>
+
+            <!-- Description Field -->
+            <div class="form-field">
+              <label for="description" class="field-label">
+                Description of Documents <span class="required">*</span>
+              </label>
+              <textarea 
+                id="description"
+                formControlName="description"
+                class="form-textarea"
+                rows="4"
+                placeholder="Enter description of document">
+              </textarea>
+              <small *ngIf="configForm.get('description')?.touched && configForm.get('description')?.invalid" 
+                     class="error-message">
+                Description is required
+              </small>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <custom-button
+              type="button"
+              label="Cancel"
+              variant="secondary"
+              (buttonClick)="onCancel()">
+            </custom-button>
+            <custom-button
+              type="submit"
+              label="Add Sub-Category"
+              variant="primary"
+              [disabled]="configForm.invalid">
+            </custom-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>

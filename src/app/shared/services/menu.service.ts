@@ -27,25 +27,30 @@ export class MenuService {
         },
         {
           icon: 'pi pi-briefcase',
-          label: 'Trade Certificate Related'
+          label: 'Trade Certificate Related',
+          route: '/trade-certificate-config'
         },
         {
           icon: 'pi pi-shop',
-          label: 'Dealer End Related'
+          label: 'Dealer End Related',
+          route: '/dealer-end-config'
         }
       ]
     },
     {
       icon: 'pi pi-plus',
-      label: 'Addition of Document Category'
+      label: 'Addition of Document Category',
+      route: '/addition-of-category'
     },
     {
       icon: 'pi pi-plus-circle',
-      label: 'Addition of Document Sub-Category'
+      label: 'Addition of Document Sub-Category',
+      route: '/addition-of-sub-category'
     },
     {
       icon: 'pi pi-link',
-      label: 'Addition of Category to Sub-Category'
+      label: 'Addition of Category to Sub-Category',
+      route: '/category-to-sub-category'
     },
     {
       icon: 'pi pi-eye',

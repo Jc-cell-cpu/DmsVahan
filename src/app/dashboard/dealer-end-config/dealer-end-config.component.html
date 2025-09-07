@@ -1,0 +1,138 @@
+<div class="dashboard-layout">
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+    <i class="pi pi-bars"></i>
+  </button>
+  
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+  
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isOpen]="sidebarOpen"
+    [menuItems]="menuItems"
+    (toggleSidebar)="toggleSidebar()"
+    (menuItemClick)="onMenuItemClick($event)">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Content Area -->
+    <div class="content-area">
+      <div class="content-card">
+        <div class="card-header">
+          <div class="section-header">
+            <h2 class="section-title">Dealer End Related</h2>
+            <app-state-badge [stateName]="selectedState"></app-state-badge>
+          </div>
+        </div>
+
+        <!-- Alert Notice -->
+        <div *ngIf="showAlert" class="alert-notice">
+          <div class="alert-content">
+            <i class="pi pi-exclamation-triangle"></i>
+            <div class="alert-text">
+              <strong>Please Note:</strong> All mandatory fields marked with asterisk (*) must be filled before submission.
+            </div>
+            <button class="alert-close" (click)="dismissAlert()">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Configuration Form -->
+        <form [formGroup]="configForm" (ngSubmit)="onSubmit()" class="config-form">
+          <div class="form-grid">
+            <!-- Row 1 -->
+            <div class="form-field">
+              <label for="transactionPurpose" class="field-label">
+                Transaction Purpose <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="transactionPurposes"
+                formControlName="transactionPurpose"
+                placeholder="Select Transaction Purpose">
+              </custom-select>
+              <small *ngIf="configForm.get('transactionPurpose')?.touched && configForm.get('transactionPurpose')?.invalid" 
+                     class="error-message">
+                Transaction Purpose is required
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="vehicleType" class="field-label">Vehicle Type</label>
+              <custom-select
+                [options]="vehicleTypes"
+                formControlName="vehicleType"
+                placeholder="Select Vehicle Type">
+              </custom-select>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="form-field">
+              <label for="documentType" class="field-label">
+                Document Type <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="documentTypes"
+                formControlName="documentType"
+                placeholder="Search Document Type"
+                [searchable]="true">
+              </custom-select>
+              <small *ngIf="configForm.get('documentType')?.touched && configForm.get('documentType')?.invalid" 
+                     class="error-message">
+                Document Type is required
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="subDocumentType" class="field-label">
+                Sub Document Type <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="subDocumentTypes"
+                formControlName="subDocumentType"
+                placeholder="Search Sub Document Type"
+                [searchable]="true">
+              </custom-select>
+              <small *ngIf="configForm.get('subDocumentType')?.touched && configForm.get('subDocumentType')?.invalid" 
+                     class="error-message">
+                Sub Document Type is required
+              </small>
+            </div>
+          </div>
+
+          <!-- Checkbox Section -->
+          <div class="checkbox-section">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="acceptTerms" class="checkbox-input">
+              <span class="checkbox-text">
+                Do you want to make the above selected document(s) mandatory? If yes, then kindly tick the checkbox.
+              </span>
+            </label>
+            <!-- <p class="warning-text">
+              <i class="pi pi-exclamation-triangle"></i>
+              Warning: Providing false information may result in legal action and rejection of application.
+            </p> -->
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <custom-button
+              type="button"
+              label="Cancel"
+              variant="secondary"
+              (buttonClick)="onCancel()">
+            </custom-button>
+            <custom-button
+              type="submit"
+              label="Submit Configuration"
+              variant="primary"
+              [disabled]="configForm.invalid">
+            </custom-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>

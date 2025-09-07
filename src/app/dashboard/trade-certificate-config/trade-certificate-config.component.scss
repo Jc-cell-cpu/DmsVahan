@@ -1,0 +1,44 @@
+@use '../document-config/document-config.component.scss';
+
+/* Trade certificate specific styles */
+.description-field {
+  grid-column: 1 / -1; /* Span full width */
+}
+
+.description-display {
+  margin-top: 0.5rem;
+}
+
+.description-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: none;
+  cursor: default;
+  
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  &::placeholder {
+    color: #9ca3af;
+    font-style: italic;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .description-textarea {
+    min-height: 100px;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+}

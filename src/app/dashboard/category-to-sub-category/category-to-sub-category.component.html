@@ -1,0 +1,130 @@
+<div class="dashboard-layout">
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+    <i class="pi pi-bars"></i>
+  </button>
+  
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+  
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isOpen]="sidebarOpen"
+    [menuItems]="menuItems"
+    (toggleSidebar)="toggleSidebar()"
+    (menuItemClick)="onMenuItemClick($event)">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Content Area -->
+    <div class="content-area">
+      <div class="content-card">
+        <div class="card-header">
+          <div class="section-header">
+            <h2 class="section-title">Addition of Category to Sub-Category</h2>
+            <app-state-badge [stateName]="selectedState"></app-state-badge>
+          </div>
+        </div>
+
+        <!-- Alert Notice -->
+        <div *ngIf="showAlert" class="alert-notice">
+          <div class="alert-content">
+            <i class="pi pi-exclamation-triangle"></i>
+            <div class="alert-text">
+              <strong>Please Note:</strong> All mandatory fields must be filled before submission. 
+              Select a document type to view the corresponding sub-category details.
+            </div>
+            <button class="alert-close" (click)="dismissAlert()">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Configuration Form -->
+        <form [formGroup]="configForm" (ngSubmit)="onSubmit()" class="config-form">
+          <div class="form-grid">
+            <!-- Document Type Dropdown -->
+            <div class="form-field">
+              <label for="documentType" class="field-label">
+                Name of Document Type <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="documentTypes"
+                formControlName="documentType"
+                placeholder="Select Document Type">
+              </custom-select>
+              <small *ngIf="configForm.get('documentType')?.touched && configForm.get('documentType')?.invalid" 
+                     class="error-message">
+                Document Type is required
+              </small>
+            </div>
+
+            <!-- Short Name Field (Disabled) -->
+            <div class="form-field">
+              <label for="shortName" class="field-label">
+                Short Name of Sub Documents
+              </label>
+              <input 
+                type="text" 
+                id="shortName"
+                formControlName="shortName"
+                class="form-input disabled-field"
+                readonly
+                placeholder="Short name will appear here">
+            </div>
+
+            <!-- Description Field (Disabled) -->
+            <div class="form-field description-field">
+              <label for="description" class="field-label">
+                Description of Sub Documents
+              </label>
+              <textarea 
+                id="description"
+                formControlName="description"
+                class="form-textarea disabled-field"
+                rows="3"
+                readonly
+                placeholder="Description will appear here">
+              </textarea>
+            </div>
+
+            <!-- Note Description Field -->
+            <div class="form-field note-field">
+              <label for="noteDescription" class="field-label">
+                Note Description of Sub Documents <span class="required">*</span>
+              </label>
+              <textarea 
+                id="noteDescription"
+                formControlName="noteDescription"
+                class="form-textarea"
+                rows="4"
+                placeholder="Enter additional notes or description for the sub documents">
+              </textarea>
+              <small *ngIf="configForm.get('noteDescription')?.touched && configForm.get('noteDescription')?.invalid" 
+                     class="error-message">
+                Note Description is required
+              </small>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <custom-button
+              type="button"
+              label="Cancel"
+              variant="secondary"
+              (buttonClick)="onCancel()">
+            </custom-button>
+            <custom-button
+              type="submit"
+              label="Add Category to Sub-Category"
+              variant="primary"
+              [disabled]="configForm.invalid">
+            </custom-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
