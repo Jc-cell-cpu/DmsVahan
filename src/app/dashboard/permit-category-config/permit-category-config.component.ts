@@ -8,19 +8,18 @@ import { StateBadgeComponent } from '../../shared/components/state-badge/state-b
 import { MenuService } from '../../shared/services/menu.service';
 
 @Component({
-  selector: 'app-permit-config',
+  selector: 'app-permit-category-config',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, CustomButtonComponent, SidebarComponent, StateBadgeComponent],
-  templateUrl: './permit-config.component.html',
-  styleUrls: ['./permit-config.component.scss']
+  templateUrl: './permit-category-config.component.html',
+  styleUrls: ['./permit-category-config.component.scss']
 })
-export class PermitConfigComponent implements OnInit {
+export class PermitCategoryConfigComponent implements OnInit {
   configForm!: FormGroup;
   showAlert = true;
   sidebarOpen = true;
   selectedState = 'Andaman & Nicobar Island';
   permitDropdownOpen = false;
-  
   menuItems: MenuItem[] = [];
 
   transactionPurposes: SelectOption[] = [
@@ -29,13 +28,13 @@ export class PermitConfigComponent implements OnInit {
     { value: 'duplicate', label: 'Duplicate Permit' }
   ];
 
-  vehicleTypes: SelectOption[] = [
-    { value: 'goods', label: 'Goods Vehicle' },
-    { value: 'passenger', label: 'Passenger Vehicle' },
-    { value: 'contract_carriage', label: 'Contract Carriage' }
+  vehicleClasses: SelectOption[] = [
+    { value: 'light_motor', label: 'Light Motor Vehicle' },
+    { value: 'heavy_motor', label: 'Heavy Motor Vehicle' },
+    { value: 'transport', label: 'Transport Vehicle' }
   ];
 
-  transportTypes: SelectOption[] = [
+  transTypes: SelectOption[] = [
     { value: 'public', label: 'Public Transport' },
     { value: 'private', label: 'Private Transport' },
     { value: 'commercial', label: 'Commercial Transport' }
@@ -56,6 +55,13 @@ export class PermitConfigComponent implements OnInit {
     { value: 'temporary_permit', label: 'Temporary Permit' }
   ];
 
+  permitCategories: SelectOption[] = [
+    { value: 'category_a', label: 'Category A - Interstate' },
+    { value: 'category_b', label: 'Category B - Intrastate' },
+    { value: 'category_c', label: 'Category C - City Service' },
+    { value: 'category_d', label: 'Category D - Rural Service' }
+  ];
+
   registrationTypes: SelectOption[] = [
     { value: 'fresh', label: 'Fresh Registration' },
     { value: 'transfer', label: 'Transfer of Registration' },
@@ -71,17 +77,18 @@ export class PermitConfigComponent implements OnInit {
   constructor(private fb: FormBuilder, private menuService: MenuService) {}
 
   ngOnInit(): void {
-    this.menuItems = this.menuService.getMenuItems('/permit-config');
+    this.menuItems = this.menuService.getMenuItems('/permit-category-config');
     this.initializeForm();
   }
 
   initializeForm(): void {
     this.configForm = this.fb.group({
       transactionPurpose: ['', Validators.required],
-      vehicleType: [''],
-      transportType: ['', Validators.required],
+      vehicleClass: [''],
+      transType: ['', Validators.required],
       documentType: ['', Validators.required],
       permit: [[]],
+      permitCategory: ['', Validators.required],
       registrationType: [''],
       subDocumentType: ['', Validators.required],
       acceptTerms: [false]
@@ -164,6 +171,4 @@ export class PermitConfigComponent implements OnInit {
       this.permitDropdownOpen = false;
     }
   }
-
-
 }

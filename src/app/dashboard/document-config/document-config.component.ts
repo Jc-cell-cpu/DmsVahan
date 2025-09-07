@@ -5,6 +5,7 @@ import { CustomSelectComponent, SelectOption } from '../../shared/components/cus
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
 import { SidebarComponent, MenuItem } from '../../shared/components/sidebar/sidebar.component';
 import { StateBadgeComponent } from '../../shared/components/state-badge/state-badge.component';
+import { MenuService } from '../../shared/services/menu.service';
 
 @Component({
   selector: 'app-document-config',
@@ -18,66 +19,7 @@ export class DocumentConfigComponent implements OnInit {
   showAlert = true;
   sidebarOpen = true;
   selectedState = 'Andaman & Nicobar Island';
-  
-  menuItems: MenuItem[] = [
-    {
-      icon: 'pi pi-folder',
-      label: 'Document Configuration',
-      expanded: true,
-      children: [
-        {
-          icon: 'pi pi-car',
-          label: 'Vahan Related',
-          route: '/document-config',
-          active: true
-        },
-        {
-          icon: 'pi pi-file-edit',
-          label: 'Permit Related',
-          expanded: false,
-          children: [
-            { icon: 'pi pi-file', label: 'Permit', route: '/permit-config' },
-            { icon: 'pi pi-cog', label: 'Permit Category Configuration' }
-          ]
-        },
-        {
-          icon: 'pi pi-briefcase',
-          label: 'Trade Certificate Related'
-        },
-        {
-          icon: 'pi pi-shop',
-          label: 'Dealer End Related'
-        }
-      ]
-    },
-    {
-      icon: 'pi pi-plus',
-      label: 'Addition of Document Category'
-    },
-    {
-      icon: 'pi pi-plus-circle',
-      label: 'Addition of Document Sub-Category'
-    },
-    {
-      icon: 'pi pi-link',
-      label: 'Addition of Category to Sub-Category'
-    },
-    {
-      icon: 'pi pi-eye',
-      label: 'View Assign Document'
-    },
-    {
-      icon: 'pi pi-wrench',
-      label: 'DMS Utility',
-      children: [
-        { icon: 'pi pi-search', label: 'Document View By Application No.' }
-      ]
-    },
-    {
-      icon: 'pi pi-sign-out',
-      label: 'Logout'
-    }
-  ];
+  menuItems: MenuItem[] = [];
 
   transactionPurposes: SelectOption[] = [
     { value: 'new_registration', label: 'New Registration' },
@@ -122,9 +64,10 @@ export class DocumentConfigComponent implements OnInit {
     { value: 'scanned', label: 'Scanned Document' }
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private menuService: MenuService) {}
 
   ngOnInit(): void {
+    this.menuItems = this.menuService.getMenuItems('/document-config');
     this.configForm = this.fb.group({
       transactionPurpose: ['', Validators.required],
       vehicleType: [''],

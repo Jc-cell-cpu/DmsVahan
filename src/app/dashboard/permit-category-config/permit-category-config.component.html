@@ -22,7 +22,7 @@
       <div class="content-card">
         <div class="card-header">
           <div class="section-header">
-            <h2 class="section-title">Permit Related</h2>
+            <h2 class="section-title">Permit Category Configuration</h2>
             <app-state-badge [stateName]="selectedState"></app-state-badge>
           </div>
         </div>
@@ -60,27 +60,27 @@
             </div>
 
             <div class="form-field">
-              <label for="vehicleType" class="field-label">Vehicle Type</label>
+              <label for="vehicleClass" class="field-label">Vehicle Class</label>
               <custom-select
-                [options]="vehicleTypes"
-                formControlName="vehicleType"
-                placeholder="Select Vehicle Type">
+                [options]="vehicleClasses"
+                formControlName="vehicleClass"
+                placeholder="Select Vehicle Class">
               </custom-select>
             </div>
 
             <!-- Row 2 -->
             <div class="form-field">
-              <label for="transportType" class="field-label">
-                Transport Type <span class="required">*</span>
+              <label for="transType" class="field-label">
+                Trans Type <span class="required">*</span>
               </label>
               <custom-select
-                [options]="transportTypes"
-                formControlName="transportType"
-                placeholder="Select Transport Type">
+                [options]="transTypes"
+                formControlName="transType"
+                placeholder="Select Trans Type">
               </custom-select>
-              <small *ngIf="configForm.get('transportType')?.touched && configForm.get('transportType')?.invalid" 
+              <small *ngIf="configForm.get('transType')?.touched && configForm.get('transType')?.invalid" 
                      class="error-message">
-                Transport Type is required
+                Trans Type is required
               </small>
             </div>
 
@@ -129,6 +129,22 @@
             </div>
 
             <div class="form-field">
+              <label for="permitCategory" class="field-label">
+                Permit Category <span class="required">*</span>
+              </label>
+              <custom-select
+                [options]="permitCategories"
+                formControlName="permitCategory"
+                placeholder="Select Permit Category">
+              </custom-select>
+              <small *ngIf="configForm.get('permitCategory')?.touched && configForm.get('permitCategory')?.invalid" 
+                     class="error-message">
+                Permit Category is required
+              </small>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="form-field">
               <label for="registrationType" class="field-label">Registration Type</label>
               <custom-select
                 [options]="registrationTypes"
@@ -137,7 +153,6 @@
               </custom-select>
             </div>
 
-            <!-- Row 4 -->
             <div class="form-field">
               <label for="subDocumentType" class="field-label">
                 Sub Document Type <span class="required">*</span>
