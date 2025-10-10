@@ -23,6 +23,7 @@ export class SidebarComponent {
   @Input() menuItems: MenuItem[] = [];
   @Output() toggleSidebar = new EventEmitter<void>();
   @Output() menuItemClick = new EventEmitter<MenuItem>();
+  @Output() logout = new EventEmitter<void>();
 
   constructor(private router: Router) {}
 
@@ -34,6 +35,12 @@ export class SidebarComponent {
     if (item.children && item.children.length > 0) {
       item.expanded = !item.expanded;
     } else {
+      // Check if it's logout menu item
+      if (item.label === 'Logout') {
+        this.logout.emit();
+        return;
+      }
+      
       if (item.route) {
         this.router.navigate([item.route]);
       }

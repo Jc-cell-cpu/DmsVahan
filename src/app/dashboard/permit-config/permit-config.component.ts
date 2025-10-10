@@ -17,7 +17,7 @@ import { MenuService } from '../../shared/services/menu.service';
 export class PermitConfigComponent implements OnInit {
   configForm!: FormGroup;
   showAlert = true;
-  sidebarOpen = true;
+  sidebarOpen = window.innerWidth >= 768;
   selectedState = 'Andaman & Nicobar Island';
   permitDropdownOpen = false;
   
@@ -73,6 +73,9 @@ export class PermitConfigComponent implements OnInit {
   ngOnInit(): void {
     this.menuItems = this.menuService.getMenuItems('/permit-config');
     this.initializeForm();
+    
+    // Set sidebar appropriately on initial load
+    this.onResize();
   }
 
   initializeForm(): void {
@@ -113,6 +116,12 @@ export class PermitConfigComponent implements OnInit {
   onMenuItemClick(item: MenuItem): void {
     this.menuItems.forEach(menuItem => menuItem.active = false);
     item.active = true;
+    
+    // Auto-close sidebar on mobile when a route is clicked
+    if (window.innerWidth < 768 && item.route) {
+      this.closeSidebar();
+    }
+    
     console.log('Menu item clicked:', item.label);
   }
 
@@ -164,6 +173,14 @@ export class PermitConfigComponent implements OnInit {
       this.permitDropdownOpen = false;
     }
   }
-
-
+  
+  @HostListener('window:resize')
+  onResize(): void {
+    // Auto-expand sidebar on larger viewports, close on mobile
+    if (window.innerWidth >= 768) {
+      this.sidebarOpen = true;
+    } else {
+      this.sidebarOpen = false;
+    }
+  }
 }

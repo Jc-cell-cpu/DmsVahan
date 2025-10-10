@@ -17,7 +17,7 @@ import { MenuService } from '../../shared/services/menu.service';
 export class PermitCategoryConfigComponent implements OnInit {
   configForm!: FormGroup;
   showAlert = true;
-  sidebarOpen = true;
+  sidebarOpen = window.innerWidth >= 768;
   selectedState = 'Andaman & Nicobar Island';
   permitDropdownOpen = false;
   menuItems: MenuItem[] = [];
@@ -79,6 +79,7 @@ export class PermitCategoryConfigComponent implements OnInit {
   ngOnInit(): void {
     this.menuItems = this.menuService.getMenuItems('/permit-category-config');
     this.initializeForm();
+    this.onResize();
   }
 
   initializeForm(): void {
@@ -120,6 +121,9 @@ export class PermitCategoryConfigComponent implements OnInit {
   onMenuItemClick(item: MenuItem): void {
     this.menuItems.forEach(menuItem => menuItem.active = false);
     item.active = true;
+    if (window.innerWidth < 768 && item.route) {
+      this.closeSidebar();
+    }
     console.log('Menu item clicked:', item.label);
   }
 
@@ -169,6 +173,15 @@ export class PermitCategoryConfigComponent implements OnInit {
     const target = event.target as HTMLElement;
     if (!target.closest('.multi-select-container')) {
       this.permitDropdownOpen = false;
+    }
+  }
+  
+  @HostListener('window:resize')
+  onResize(): void {
+    if (window.innerWidth >= 768) {
+      this.sidebarOpen = true;
+    } else {
+      this.sidebarOpen = false;
     }
   }
 }

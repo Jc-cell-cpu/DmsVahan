@@ -7,6 +7,8 @@ import { DealerEndConfigComponent } from './dashboard/dealer-end-config/dealer-e
 import { AdditionOfCategoryComponent } from './dashboard/addition-of-category/addition-of-category.component';
 import { AdditionOfSubCategoryComponent } from './dashboard/addition-of-sub-category/addition-of-sub-category.component';
 import { CategoryToSubCategoryComponent } from './dashboard/category-to-sub-category/category-to-sub-category.component';
+import { ViewAssignComponent } from './dashboard/view-assign/view-assign.component';
+import { DocumentViewByApplicationComponent } from './dashboard/document-view-by-application/document-view-by-application.component';
 
 export const routes: Routes = [
   { path: 'auth', loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule) },
@@ -18,5 +20,7 @@ export const routes: Routes = [
   { path: 'addition-of-category', component: AdditionOfCategoryComponent },
   { path: 'addition-of-sub-category', component: AdditionOfSubCategoryComponent },
   { path: 'category-to-sub-category', component: CategoryToSubCategoryComponent },
+  { path: 'view-assign', component: ViewAssignComponent },
+  { path: 'document-view-by-application', component: DocumentViewByApplicationComponent },
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' }
 ];

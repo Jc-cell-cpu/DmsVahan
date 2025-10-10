@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -13,9 +15,11 @@
   text-decoration: none;
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 1;
+    /* keep colors when disabled */
     cursor: not-allowed;
     transform: none !important;
+    filter: none;
   }
 
   i {
@@ -25,7 +29,7 @@
   @media (max-width: 640px) {
     padding: 0.65rem 1.25rem;
     font-size: 0.9rem;
-    
+
     i {
       font-size: 0.9rem;
     }
@@ -34,12 +38,14 @@
   @media (max-width: 480px) {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
-    
+
     i {
       font-size: 0.85rem;
     }
   }
 }
+
+
 
 .primary {
   background: #007ad9;
@@ -49,6 +55,13 @@
   &:hover:not(:disabled) {
     background: #0056b3;
     transform: translateY(-1px);
+  }
+
+  &:disabled {
+    background: color.adjust(#007ad9, $lightness: 28%, $space: hsl);
+    border-color: color.adjust(#007ad9, $lightness: 28%, $space: hsl);
+    color: #f8fbff;
+    box-shadow: none;
   }
 }
 
@@ -61,5 +74,11 @@
     background: #f8f9fa;
     border-color: #cbd5e1;
     transform: translateY(-1px);
+  }
+
+  &:disabled {
+    background: #fafbfc;
+    color: #9aa3ad;
+    border-color: #e5e7eb;
   }
 }

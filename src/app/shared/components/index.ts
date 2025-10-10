@@ -8,3 +8,4 @@ export { AppHeaderComponent } from './app-header/app-header.component';
 export { AppFooterComponent } from './app-footer/app-footer.component';
 export { ToastComponent } from './toast/toast.component';
 export { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
+export { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';

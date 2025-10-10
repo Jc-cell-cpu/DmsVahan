@@ -12,7 +12,8 @@
     [isOpen]="sidebarOpen"
     [menuItems]="menuItems"
     (toggleSidebar)="toggleSidebar()"
-    (menuItemClick)="onMenuItemClick($event)">
+    (menuItemClick)="onMenuItemClick($event)"
+    (logout)="onLogoutRequest()">
   </app-sidebar>
 
   <!-- Main Content -->
@@ -154,5 +155,14 @@
         </form>
       </div>
     </div>
+    
+    <app-confirm-dialog
+      [open]="confirm.open"
+      [title]="confirm.title"
+      [message]="confirm.message"
+      [variant]="confirm.variant"
+      (confirm)="onConfirmDialog()"
+      (cancel)="onCancelDialog()">
+    </app-confirm-dialog>
   </main>
 </div>

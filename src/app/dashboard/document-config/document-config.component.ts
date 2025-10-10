@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomSelectComponent, SelectOption } from '../../shared/components/custom-select/custom-select.component';
@@ -6,20 +6,33 @@ import { CustomButtonComponent } from '../../shared/components/custom-button/cus
 import { SidebarComponent, MenuItem } from '../../shared/components/sidebar/sidebar.component';
 import { StateBadgeComponent } from '../../shared/components/state-badge/state-badge.component';
 import { MenuService } from '../../shared/services/menu.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { ToastComponent } from '../../shared/components/toast/toast.component';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-document-config',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, CustomButtonComponent, SidebarComponent, StateBadgeComponent],
+  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, CustomButtonComponent, SidebarComponent, StateBadgeComponent, ToastComponent, ConfirmDialogComponent],
   templateUrl: './document-config.component.html',
   styleUrls: ['./document-config.component.scss']
 })
 export class DocumentConfigComponent implements OnInit {
   configForm!: FormGroup;
   showAlert = true;
-  sidebarOpen = true;
+  sidebarOpen = window.innerWidth >= 768;
   selectedState = 'Andaman & Nicobar Island';
   menuItems: MenuItem[] = [];
+  
+  // Confirm dialog state
+  confirm = {
+    open: false,
+    title: 'Please Confirm',
+    message: '',
+    variant: 'info' as 'info' | 'warning' | 'danger',
+    onConfirm: () => {},
+    onCancel: () => {}
+  };
 
   transactionPurposes: SelectOption[] = [
     { value: 'new_registration', label: 'New Registration' },
@@ -64,7 +77,7 @@ export class DocumentConfigComponent implements OnInit {
     { value: 'scanned', label: 'Scanned Document' }
   ];
 
-  constructor(private fb: FormBuilder, private menuService: MenuService) {}
+  constructor(private fb: FormBuilder, private menuService: MenuService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.menuItems = this.menuService.getMenuItems('/document-config');
@@ -77,6 +90,9 @@ export class DocumentConfigComponent implements OnInit {
       subDocumentType: ['', Validators.required],
       acceptTerms: [false]
     });
+    
+    // Set sidebar appropriately on initial load
+    this.onResize();
   }
 
   onSubmit(): void {
@@ -108,7 +124,62 @@ export class DocumentConfigComponent implements OnInit {
     this.menuItems.forEach(menuItem => menuItem.active = false);
     item.active = true;
     
+    // Auto-close sidebar on mobile when a route is clicked
+    if (window.innerWidth < 768 && item.route) {
+      this.closeSidebar();
+    }
+    
     // Handle navigation or actions based on item
     console.log('Menu item clicked:', item.label);
+  }
+  
+  @HostListener('window:resize')
+  onResize(): void {
+    // Auto-expand sidebar on larger viewports, close on mobile
+    if (window.innerWidth >= 768) {
+      this.sidebarOpen = true;
+    } else {
+      this.sidebarOpen = false;
+    }
+  }
+  
+  onLogoutRequest(): void {
+    this.openConfirm({
+      title: 'Confirm Logout',
+      message: 'Are you sure you want to logout?',
+      variant: 'warning',
+      onConfirm: () => this.performLogout()
+    });
+  }
+  
+  private performLogout(): void {
+    this.authService.logout();
+  }
+  
+  private openConfirm(opts: { title?: string; message: string; variant?: 'info' | 'warning' | 'danger'; onConfirm: () => void; onCancel?: () => void }): void {
+    this.confirm.title = opts.title ?? 'Please Confirm';
+    this.confirm.message = opts.message;
+    this.confirm.variant = opts.variant ?? 'info';
+    this.confirm.onConfirm = opts.onConfirm;
+    this.confirm.onCancel = opts.onCancel ?? (() => {});
+    this.confirm.open = true;
+  }
+  
+  onConfirmDialog(): void {
+    this.confirm.open = false;
+    try {
+      this.confirm.onConfirm();
+    } finally {
+      this.confirm.onConfirm = () => {};
+    }
+  }
+  
+  onCancelDialog(): void {
+    this.confirm.open = false;
+    try {
+      this.confirm.onCancel();
+    } finally {
+      this.confirm.onCancel = () => {};
+    }
   }
 }

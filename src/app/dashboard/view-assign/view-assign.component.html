@@ -1,0 +1,150 @@
+<div class="dashboard-layout">
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+    <i class="pi pi-bars"></i>
+  </button>
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isOpen]="sidebarOpen"
+    [menuItems]="menuItems"
+    (toggleSidebar)="toggleSidebar()"
+    (menuItemClick)="onMenuItemClick($event)"
+    (logout)="onLogoutRequest()">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-area">
+      <div class="content-card">
+        <div class="card-header">
+          <div class="section-header">
+            <h2 class="section-title">View Assign Document</h2>
+            <app-state-badge [stateName]="selectedState"></app-state-badge>
+          </div>
+        </div>
+
+        <form [formGroup]="filterForm" class="config-form" (ngSubmit)="$event.preventDefault()">
+          <div class="form-grid">
+            <!-- Select Service -->
+            <div class="form-field">
+              <label class="field-label">Select Service</label>
+              <custom-select formControlName="service" [options]="serviceOptions" placeholder="Select Service"></custom-select>
+            </div>
+
+            <!-- Search Documents Details by Purpose -->
+            <div class="form-field">
+              <label class="field-label">Search Documents Details by Purpose</label>
+              <custom-select formControlName="purpose" [options]="purposeOptions" placeholder="Select Purpose" [searchable]="true"></custom-select>
+            </div>
+
+            <!-- Dynamic fields -->
+            <div class="form-field" *ngIf="shouldShow('authMode')">
+              <label class="field-label">Authentication Mode</label>
+              <custom-select formControlName="authMode" [options]="authModes" placeholder="Select Authentication Mode"></custom-select>
+            </div>
+
+            <div class="form-field" *ngIf="shouldShow('serviceReason')">
+              <label class="field-label">Service Reason</label>
+              <custom-select formControlName="serviceReason" [options]="serviceReasons" placeholder="Select Reason"></custom-select>
+            </div>
+          </div>
+
+          <div class="mandatory-toolbar" [class.disabled]="!documentsTree.length">
+            <div class="toolbar-left">
+<custom-button
+                type="button"
+                label="Assigning the mandatory all documents"
+                [variant]="'primary'"
+                [disabled]="!filterForm.get('markAllMandatory')?.value || !documentsTree.length"
+                (buttonClick)="onApplyMarkAllClick()">
+              </custom-button>
+              <label class="toggle-all">
+<input type="checkbox" formControlName="markAllMandatory" [disabled]="!documentsTree.length">
+                <span>Mark all as mandatory</span>
+              </label>
+            </div>
+          </div>
+        </form>
+
+        <!-- Documents Tree -->
+        <div class="documents-section" *ngIf="documentsTree.length; else emptyState">
+          <div class="doc-header">
+            <div class="col-type">Document Type</div>
+            <div class="col-mandatory">Mandatory / Non-Mandatory</div>
+            <div class="col-delete">Delete</div>
+          </div>
+
+          <ul class="doc-tree">
+            <li class="doc-node" *ngFor="let node of documentsTree">
+              <div class="node-row">
+                <div class="col-type">
+                  <button class="expand-btn" (click)="toggleExpand(node)" *ngIf="node.children?.length">
+                    <i class="pi" [ngClass]="node.expanded ? 'pi-minus' : 'pi-plus'"></i>
+                  </button>
+                  <i class="pi pi-folder-open doc-icon"></i>
+                  <span class="node-label">{{ node.label }}</span>
+                </div>
+                <div class="col-mandatory">
+                  <label class="switch">
+<input type="checkbox" [checked]="node.mandatory" (change)="onMandatoryToggleRequested(node, $event.target.checked, $event)">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="col-delete">
+<button class="icon-btn danger" (click)="onDeleteRequest(node.id)" type="button" [disabled]="!node.deletable">
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <ul class="children" *ngIf="node.children?.length && node.expanded === true">
+                <li class="child-row" *ngFor="let child of node.children">
+                  <div class="col-type">
+                    <span class="connector"></span>
+                    <i class="pi pi-file child-icon"></i>
+                    <span class="node-label">{{ child.label }}</span>
+                  </div>
+                  <div class="col-mandatory">
+                    <span class="na-text">—</span>
+                  </div>
+                  <div class="col-delete">
+<button class="icon-btn danger" (click)="onDeleteRequest(child.id)" type="button">
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <i class="pi pi-search"></i>
+            <p>Select both Service and Purpose to view configured documents.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <!-- Toast -->
+    <app-toast 
+      [show]="toast.show" 
+      [message]="toast.message" 
+      [type]="toast.type"
+      (closed)="toast.show=false">
+</app-toast>
+
+    <app-confirm-dialog
+      [open]="confirm.open"
+      [title]="confirm.title"
+      [message]="confirm.message"
+      [variant]="confirm.variant"
+      (confirm)="onConfirmDialog()"
+      (cancel)="onCancelDialog()">
+    </app-confirm-dialog>
+  </main>
+</div>

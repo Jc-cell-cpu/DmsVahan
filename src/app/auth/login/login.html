@@ -1,11 +1,38 @@
 <div class="login-container">
   <custom-card class="login-card">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate autocomplete="nope" data-form-type="other">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="login-form"
+      novalidate
+      autocomplete="nope"
+      data-form-type="other"
+    >
       <!-- Multiple fake inputs to confuse Chrome -->
-      <input type="text" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="username">
-      <input type="password" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="current-password">
-      <input type="text" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="new-password">
-      <input type="email" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="email">
+      <input
+        type="text"
+        style="position: absolute; left: -9999px"
+        tabindex="-1"
+        autocomplete="username"
+      />
+      <input
+        type="password"
+        style="position: absolute; left: -9999px"
+        tabindex="-1"
+        autocomplete="current-password"
+      />
+      <input
+        type="text"
+        style="position: absolute; left: -9999px"
+        tabindex="-1"
+        autocomplete="new-password"
+      />
+      <input
+        type="email"
+        style="position: absolute; left: -9999px"
+        tabindex="-1"
+        autocomplete="email"
+      />
       <!-- User ID -->
       <div class="field">
         <label for="userId" class="field-label">
@@ -22,13 +49,19 @@
           [attr.name]="randomFieldName1"
           [attr.data-form-type]="'other'"
           [attr.data-lpignore]="true"
-          [attr.aria-describedby]="loginForm.get('userId')?.invalid && loginForm.get('userId')?.touched ? 'userId-error' : null">
+          [attr.aria-describedby]="
+            loginForm.get('userId')?.invalid && loginForm.get('userId')?.touched
+              ? 'userId-error'
+              : null
+          "
+        >
         </custom-input>
-        @if (loginForm.get('userId')?.touched && loginForm.get('userId')?.invalid) {
-          <small id="userId-error" class="error-message" role="alert">
-            <i class="pi pi-exclamation-triangle"></i>
-            User ID is required (minimum 3 characters)
-          </small>
+        @if (loginForm.get('userId')?.touched &&
+        loginForm.get('userId')?.invalid) {
+        <small id="userId-error" class="error-message" role="alert">
+          <i class="pi pi-exclamation-triangle"></i>
+          User ID is required (minimum 3 characters)
+        </small>
         }
       </div>
 
@@ -47,13 +80,20 @@
           [attr.name]="randomFieldName2"
           [attr.data-form-type]="'other'"
           [attr.data-lpignore]="true"
-          [attr.aria-describedby]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched ? 'password-error' : null">
+          [attr.aria-describedby]="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+              ? 'password-error'
+              : null
+          "
+        >
         </custom-password>
-        @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-          <small id="password-error" class="error-message" role="alert">
-            <i class="pi pi-exclamation-triangle"></i>
-            Password is required (minimum 6 characters)
-          </small>
+        @if (loginForm.get('password')?.touched &&
+        loginForm.get('password')?.invalid) {
+        <small id="password-error" class="error-message" role="alert">
+          <i class="pi pi-exclamation-triangle"></i>
+          Password is required (minimum 6 characters)
+        </small>
         }
       </div>
 
@@ -67,13 +107,19 @@
           [options]="states"
           formControlName="state"
           placeholder="Choose your state"
-          [attr.aria-describedby]="loginForm.get('state')?.invalid && loginForm.get('state')?.touched ? 'state-error' : null">
+          [attr.aria-describedby]="
+            loginForm.get('state')?.invalid && loginForm.get('state')?.touched
+              ? 'state-error'
+              : null
+          "
+        >
         </custom-select>
-        @if (loginForm.get('state')?.touched && loginForm.get('state')?.invalid) {
-          <small id="state-error" class="error-message" role="alert">
-            <i class="pi pi-exclamation-triangle"></i>
-            Please select a state
-          </small>
+        @if (loginForm.get('state')?.touched && loginForm.get('state')?.invalid)
+        {
+        <small id="state-error" class="error-message" role="alert">
+          <i class="pi pi-exclamation-triangle"></i>
+          Please select a state
+        </small>
         }
       </div>
 
@@ -84,15 +130,25 @@
           Security Code
         </label>
         <div class="captcha-container">
-          <div class="captcha-display" role="img" [attr.aria-label]="'Security code image'">
-            <img [src]="captchaImageUrl" alt="Security Code" class="captcha-image" draggable="false">
+          <div
+            class="captcha-display"
+            role="img"
+            [attr.aria-label]="'Security code image'"
+          >
+            <img
+              [src]="captchaImageUrl"
+              alt="Security Code"
+              class="captcha-image"
+              draggable="false"
+            />
           </div>
           <custom-button
             type="button"
             icon="pi pi-refresh"
             variant="secondary"
             (buttonClick)="refreshCaptcha()"
-            [attr.aria-label]="'Refresh security code'">
+            [attr.aria-label]="'Refresh security code'"
+          >
           </custom-button>
         </div>
         <custom-input
@@ -102,17 +158,23 @@
           inputClass="full-width"
           placeholder="Enter the security code shown above"
           autocomplete="off"
-          [attr.aria-describedby]="loginForm.get('captcha')?.invalid && loginForm.get('captcha')?.touched ? 'captcha-error' : null">
+          [attr.aria-describedby]="
+            loginForm.get('captcha')?.invalid &&
+            loginForm.get('captcha')?.touched
+              ? 'captcha-error'
+              : null
+          "
+        >
         </custom-input>
-        @if (loginForm.get('captcha')?.touched && loginForm.get('captcha')?.invalid) {
-          <small id="captcha-error" class="error-message" role="alert">
-            <i class="pi pi-exclamation-triangle"></i>
-            @if (loginForm.get('captcha')?.errors?.['required']) {
-              Please enter the security code
-            } @else if (loginForm.get('captcha')?.errors?.['incorrect']) {
-              Security code is incorrect. Please try again.
-            }
-          </small>
+        @if (loginForm.get('captcha')?.touched &&
+        loginForm.get('captcha')?.invalid) {
+        <small id="captcha-error" class="error-message" role="alert">
+          <i class="pi pi-exclamation-triangle"></i>
+          @if (loginForm.get('captcha')?.errors?.['required']) { Please enter
+          the security code } @else if
+          (loginForm.get('captcha')?.errors?.['incorrect']) { Security code is
+          incorrect. Please try again. }
+        </small>
         }
       </div>
 
@@ -125,7 +187,8 @@
           variant="secondary"
           buttonClass="reset-button"
           (buttonClick)="onReset()"
-          [attr.aria-label]="'Reset form'">
+          [attr.aria-label]="'Reset form'"
+        >
         </custom-button>
         <custom-button
           type="submit"
@@ -134,18 +197,20 @@
           variant="primary"
           buttonClass="login-button"
           [disabled]="loginForm.invalid || isLoading"
-          [attr.aria-label]="'Sign in to DMS Vahan'">
+          [attr.aria-label]="'Sign in to DMS Vahan'"
+        >
         </custom-button>
       </div>
     </form>
   </custom-card>
-  
+
   <app-loading-overlay [show]="isLoading"></app-loading-overlay>
-  
-  <app-toast 
-    [show]="showToast" 
-    [message]="toastMessage" 
+
+  <app-toast
+    [show]="showToast"
+    [message]="toastMessage"
     [type]="toastType"
-    (closed)="onToastClose()">
+    (closed)="onToastClose()"
+  >
   </app-toast>
 </div>

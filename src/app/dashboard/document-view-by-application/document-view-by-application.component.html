@@ -1,0 +1,94 @@
+<div class="dashboard-layout">
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+    <i class="pi pi-bars"></i>
+  </button>
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isOpen]="sidebarOpen"
+    [menuItems]="menuItems"
+    (toggleSidebar)="toggleSidebar()"
+    (menuItemClick)="onMenuItemClick($event)"
+    (logout)="onLogoutRequest()">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-area">
+      <div class="content-card">
+        <div class="card-header">
+          <div class="section-header">
+            <h2 class="section-title">Search Documents By Application Number</h2>
+            <app-state-badge [stateName]="selectedState"></app-state-badge>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+          <label class="field-label">Application No.</label>
+          <div class="search-row">
+            <custom-input inputId="applicationNo" name="applicationNo" placeholder="Please enter application no." formControlName="applicationNo"></custom-input>
+            <custom-button type="submit" label="Search" icon="pi pi-search" [disabled]="searchForm.invalid"></custom-button>
+          </div>
+          <small *ngIf="searched && searchForm.get('applicationNo')?.invalid" class="error-message">
+            Enter a valid application no. (alphanumeric, min 6 characters)
+          </small>
+        </form>
+
+        <!-- Results -->
+        <div *ngIf="appNo && results.length" class="results-wrapper">
+          <div class="result-caption">
+            Your Search Documents Listed Below
+            <span class="muted">[Application No: <strong class="app-link">{{ appNo }}</strong>] </span>
+          </div>
+
+          <div class="table">
+            <div class="thead">
+              <div class="th serial">Serial No.</div>
+              <div class="th name">Document Name</div>
+              <div class="th status">Verified / Approved / Received</div>
+              <div class="th date">Upload / Update Date</div>
+              <div class="th date">Verify Date</div>
+              <div class="th date">Approve Date</div>
+              <div class="th date">Receive Date</div>
+            </div>
+
+            <div class="tbody">
+              <div class="tr" *ngFor="let row of results">
+                <div class="td serial">{{ row.serial }}</div>
+                <div class="td name">{{ row.name }}</div>
+                <div class="td status">
+                  <span class="square" [class.on]="row.statuses.verified" title="Verified"></span>
+                  <span class="square" [class.on]="row.statuses.approved" title="Approved"></span>
+                  <span class="square" [class.on]="row.statuses.received" title="Received"></span>
+                </div>
+                <div class="td date" data-label="Upload Date">{{ row.uploadDate | date:'MMM d, y h:mm:ss a' }}</div>
+                <div class="td date" data-label="Verify Date">{{ (row.verifyDate | date:'MMM d, y h:mm:ss a') || '-' }}</div>
+                <div class="td date" data-label="Approve Date">{{ (row.approveDate | date:'MMM d, y h:mm:ss a') || '-' }}</div>
+                <div class="td date" data-label="Receive Date">{{ (row.receiveDate | date:'MMM d, y h:mm:ss a') || '-' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="appNo && !results.length" class="empty-state">
+          <i class="pi pi-info-circle"></i>
+          <p>No documents found for application no. {{ appNo }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <app-confirm-dialog
+      [open]="confirm.open"
+      [title]="confirm.title"
+      [message]="confirm.message"
+      [variant]="confirm.variant"
+      (confirm)="onConfirmDialog()"
+      (cancel)="onCancelDialog()">
+    </app-confirm-dialog>
+  </main>
+</div>

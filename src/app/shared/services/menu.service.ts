@@ -54,13 +54,14 @@ export class MenuService {
     },
     {
       icon: 'pi pi-eye',
-      label: 'View Assign Document'
+      label: 'View Assign Document',
+      route: '/view-assign'
     },
     {
       icon: 'pi pi-wrench',
       label: 'DMS Utility',
       children: [
-        { icon: 'pi pi-search', label: 'Document View By Application No.' }
+        { icon: 'pi pi-search', label: 'Document View By Application No.', route: '/document-view-by-application' }
       ]
     },
     {

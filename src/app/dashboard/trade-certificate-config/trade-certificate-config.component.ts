@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomSelectComponent, SelectOption } from '../../shared/components/custom-select/custom-select.component';
@@ -17,7 +17,7 @@ import { MenuService } from '../../shared/services/menu.service';
 export class TradeCertificateConfigComponent implements OnInit {
   configForm!: FormGroup;
   showAlert = true;
-  sidebarOpen = true;
+  sidebarOpen = window.innerWidth >= 768;
   selectedState = 'Andaman & Nicobar Island';
   menuItems: MenuItem[] = [];
 
@@ -63,6 +63,7 @@ export class TradeCertificateConfigComponent implements OnInit {
   ngOnInit(): void {
     this.menuItems = this.menuService.getMenuItems('/trade-certificate-config');
     this.initializeForm();
+    this.onResize();
   }
 
   initializeForm(): void {
@@ -121,6 +122,18 @@ export class TradeCertificateConfigComponent implements OnInit {
   onMenuItemClick(item: MenuItem): void {
     this.menuItems.forEach(menuItem => menuItem.active = false);
     item.active = true;
+    if (window.innerWidth < 768 && item.route) {
+      this.closeSidebar();
+    }
     console.log('Menu item clicked:', item.label);
+  }
+  
+  @HostListener('window:resize')
+  onResize(): void {
+    if (window.innerWidth >= 768) {
+      this.sidebarOpen = true;
+    } else {
+      this.sidebarOpen = false;
+    }
   }
 }
