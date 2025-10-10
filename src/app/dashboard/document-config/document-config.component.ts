@@ -2,18 +2,18 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomSelectComponent, SelectOption } from '../../shared/components/custom-select/custom-select.component';
+import { CustomMultiSelectComponent } from '../../shared/components/custom-multi-select/custom-multi-select.component';
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
 import { SidebarComponent, MenuItem } from '../../shared/components/sidebar/sidebar.component';
 import { StateBadgeComponent } from '../../shared/components/state-badge/state-badge.component';
 import { MenuService } from '../../shared/services/menu.service';
 import { AuthService } from '../../shared/services/auth.service';
-import { ToastComponent } from '../../shared/components/toast/toast.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-document-config',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, CustomButtonComponent, SidebarComponent, StateBadgeComponent, ToastComponent, ConfirmDialogComponent],
+  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, CustomMultiSelectComponent, CustomButtonComponent, SidebarComponent, StateBadgeComponent, ConfirmDialogComponent],
   templateUrl: './document-config.component.html',
   styleUrls: ['./document-config.component.scss']
 })
@@ -87,7 +87,7 @@ export class DocumentConfigComponent implements OnInit {
       documentType: ['', Validators.required],
       ownershipType: [''],
       authMode: [''],
-      subDocumentType: ['', Validators.required],
+      subDocumentType: [[], Validators.required],
       acceptTerms: [false]
     });
     

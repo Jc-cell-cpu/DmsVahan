@@ -89,15 +89,16 @@
               <label for="subDocumentType" class="field-label">
                 Sub Document Type <span class="required">*</span>
               </label>
-              <custom-select
+              <custom-multi-select
                 [options]="subDocumentTypes"
                 formControlName="subDocumentType"
-                placeholder="Search Sub Document Type"
+                placeholder="Select Sub Document Types"
                 [searchable]="true">
-              </custom-select>
-              <small *ngIf="configForm.get('subDocumentType')?.touched && configForm.get('subDocumentType')?.invalid" 
+              </custom-multi-select>
+              <small *ngIf="configForm.get('subDocumentType')?.touched && 
+configForm.get('subDocumentType')?.invalid" 
                      class="error-message">
-                Sub Document Type is required
+                At least one Sub Document Type is required
               </small>
             </div>
           </div>

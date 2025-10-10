@@ -7,7 +7,6 @@ import { CustomInputComponent } from '../../shared/components/custom-input/custo
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
 import { MenuService } from '../../shared/services/menu.service';
 import { AuthService } from '../../shared/services/auth.service';
-import { ToastComponent } from '../../shared/components/toast/toast.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 interface DocumentRecord {
@@ -23,7 +22,7 @@ interface DocumentRecord {
 @Component({
   selector: 'app-document-view-by-application',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SidebarComponent, StateBadgeComponent, CustomInputComponent, CustomButtonComponent, ToastComponent, ConfirmDialogComponent],
+  imports: [CommonModule, ReactiveFormsModule, SidebarComponent, StateBadgeComponent, CustomInputComponent, CustomButtonComponent, ConfirmDialogComponent],
   templateUrl: './document-view-by-application.component.html',
   styleUrls: ['./document-view-by-application.component.scss']
 })

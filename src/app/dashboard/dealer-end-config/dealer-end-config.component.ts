@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomSelectComponent, SelectOption } from '../../shared/components/custom-select/custom-select.component';
+import { CustomMultiSelectComponent } from '../../shared/components/custom-multi-select/custom-multi-select.component';
 import { CustomButtonComponent } from '../../shared/components/custom-button/custom-button.component';
 import { SidebarComponent, MenuItem } from '../../shared/components/sidebar/sidebar.component';
 import { StateBadgeComponent } from '../../shared/components/state-badge/state-badge.component';
@@ -10,7 +11,7 @@ import { MenuService } from '../../shared/services/menu.service';
 @Component({
   selector: 'app-dealer-end-config',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, CustomButtonComponent, SidebarComponent, StateBadgeComponent],
+  imports: [CommonModule, ReactiveFormsModule, CustomSelectComponent, CustomMultiSelectComponent, CustomButtonComponent, SidebarComponent, StateBadgeComponent],
   templateUrl: './dealer-end-config.component.html',
   styleUrls: ['./dealer-end-config.component.scss']
 })
@@ -69,7 +70,7 @@ export class DealerEndConfigComponent implements OnInit {
       transactionPurpose: ['', Validators.required],
       vehicleType: [''],
       documentType: ['', Validators.required],
-      subDocumentType: ['', Validators.required],
+      subDocumentType: [[], Validators.required],
       acceptTerms: [false]
     });
   }
