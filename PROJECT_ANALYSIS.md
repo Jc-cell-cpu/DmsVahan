@@ -9,31 +9,37 @@
 ## 🛠️ Tech Stack
 
 ### Core Framework
+
 - **Angular 20.0.0** - Latest version using standalone components architecture
 - **TypeScript 5.8.2** - Strict mode enabled for type safety
 - **Node.js 20.19.0** - Runtime environment (specified in package.json start script)
 
 ### Build & Development Tools
+
 - **Angular CLI 20.0.6** - Project scaffolding and build system
 - **@angular/build** - Modern build system (Application Builder)
 - **Angular Dev Server** - Development server with hot reload
 
 ### Styling & UI
+
 - **SCSS/Sass** - CSS preprocessor for component and global styling
 - **PrimeIcons 7.0.0** - Icon library for UI elements
 - **Custom Component Library** - Handcrafted UI components with no external UI framework
 
 ### State Management & Forms
+
 - **RxJS 7.8.0** - Reactive programming library
 - **Angular Reactive Forms** - Form management with validation
 - **Angular Animations** - UI transitions and animations
 
 ### Testing
+
 - **Jasmine 5.7.0** - Testing framework
 - **Karma 6.4.0** - Test runner
 - **Karma Chrome Launcher** - Browser testing
 
 ### Module System
+
 - **ES2022** - Target compilation
 - **Zone.js 0.15.0** - Change detection mechanism
 
@@ -48,21 +54,22 @@ The project uses Angular's **standalone components** approach, eliminating the n
 ```typescript
 // Example: Login Component
 @Component({
-  selector: 'app-login',
-  standalone: true,  // ✅ Standalone component
+  selector: "app-login",
+  standalone: true, // ✅ Standalone component
   imports: [
     CommonModule,
     ReactiveFormsModule,
     CustomCardComponent,
     // Direct component imports
   ],
-  templateUrl: './login.html',
-  styleUrls: ['./login.scss']
+  templateUrl: "./login.html",
+  styleUrls: ["./login.scss"],
 })
-export class LoginComponent implements OnInit { }
+export class LoginComponent implements OnInit {}
 ```
 
 **Benefits:**
+
 - Reduced boilerplate code
 - Better tree-shaking and smaller bundle sizes
 - More explicit dependencies
@@ -97,6 +104,7 @@ DmsVahan-main/
 ### 3. **Feature-Based Organization**
 
 Each feature is self-contained with its own:
+
 - Component logic (`.ts`)
 - Template (`.html`)
 - Styles (`.scss`)
@@ -107,12 +115,11 @@ Each feature is self-contained with its own:
 ```typescript
 // app.routes.ts
 export const routes: Routes = [
-  { 
-    path: 'auth', 
-    loadChildren: () => import('./auth/auth-module')
-      .then(m => m.AuthModule)  // ✅ Lazy-loaded
+  {
+    path: "auth",
+    loadChildren: () => import("./auth/auth-module").then((m) => m.AuthModule), // ✅ Lazy-loaded
   },
-  { path: 'document-config', component: DocumentConfigComponent },
+  { path: "document-config", component: DocumentConfigComponent },
   // ...
 ];
 ```
@@ -125,7 +132,7 @@ export const routes: Routes = [
 })
 export class MenuService {
   private menuItems: MenuItem[] = [...];
-  
+
   getMenuItems(activeRoute?: string): MenuItem[] {
     // Business logic
   }
@@ -138,22 +145,25 @@ All custom input components implement Angular's `ControlValueAccessor` interface
 
 ```typescript
 @Component({
-  selector: 'custom-input',
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => CustomInputComponent),
-    multi: true
-  }]
+  selector: "custom-input",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CustomInputComponent),
+      multi: true,
+    },
+  ],
 })
 export class CustomInputComponent implements ControlValueAccessor {
-  writeValue(value: string): void { }
-  registerOnChange(fn: any): void { }
-  registerOnTouched(fn: any): void { }
-  setDisabledState(isDisabled: boolean): void { }
+  writeValue(value: string): void {}
+  registerOnChange(fn: any): void {}
+  registerOnTouched(fn: any): void {}
+  setDisabledState(isDisabled: boolean): void {}
 }
 ```
 
 **Benefits:**
+
 - Seamless integration with Angular Forms
 - Two-way data binding support
 - Validation support
@@ -168,6 +178,7 @@ export class CustomInputComponent implements ControlValueAccessor {
 Instead of using PrimeNG or Material, this project has a **completely custom UI component library**:
 
 **Custom Components:**
+
 - `custom-input` - Text input with autofill prevention
 - `custom-password` - Password input with toggle visibility
 - `custom-select` - Dropdown with search functionality
@@ -183,18 +194,18 @@ Instead of using PrimeNG or Material, this project has a **completely custom UI 
 ### 2. **Design Principles**
 
 #### **Glassmorphism Design**
+
 ```scss
 .login-card {
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);  // ✅ Glassmorphism effect
+  backdrop-filter: blur(20px); // ✅ Glassmorphism effect
   border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06);
 }
 ```
 
 #### **Gradient Accents**
+
 ```scss
 .section-title {
   background: linear-gradient(135deg, #1e40af, #3b82f6);
@@ -204,6 +215,7 @@ Instead of using PrimeNG or Material, this project has a **completely custom UI 
 ```
 
 #### **Government Theme Colors**
+
 - Primary Blue: `#007ad9`, `#3b82f6`
 - Government Header: `#1e40af`, `#1e3a8a`, `#1d4ed8`
 - Background: `#f4f6f9`, `#f8fafc`
@@ -214,24 +226,36 @@ Instead of using PrimeNG or Material, this project has a **completely custom UI 
 ### 3. **Responsive Design Strategy**
 
 **Mobile-First Breakpoints:**
+
 ```scss
 // Small Mobile
-@media (max-width: 360px) { font-size: 12px; }
+@media (max-width: 360px) {
+  font-size: 12px;
+}
 
 // Mobile Portrait
-@media (max-width: 480px) { font-size: 13px; }
+@media (max-width: 480px) {
+  font-size: 13px;
+}
 
 // Mobile Landscape / Small Tablet
-@media (max-width: 640px) { font-size: 14px; }
+@media (max-width: 640px) {
+  font-size: 14px;
+}
 
 // Tablet Portrait
-@media (max-width: 768px) { /* tablet styles */ }
+@media (max-width: 768px) {
+  /* tablet styles */
+}
 
 // Desktop
-@media (min-width: 1200px) { /* large desktop styles */ }
+@media (min-width: 1200px) {
+  /* large desktop styles */
+}
 ```
 
 **Responsive Patterns:**
+
 - **Fluid Typography** - Font sizes scale with viewport
 - **Flexible Grids** - CSS Grid with `grid-template-columns: 1fr 1fr`
 - **Collapsible Sidebar** - Sticky sidebar that collapses on mobile
@@ -285,13 +309,13 @@ private disableAutofill(): void {
 
 ```html
 <!-- Fake inputs to confuse Chrome -->
-<input type="text" style="position:absolute;left:-9999px;" 
-       tabindex="-1" autocomplete="username">
+<input type="text" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="username" />
 ```
 
 ### 2. **CAPTCHA Implementation**
 
 Custom canvas-based CAPTCHA with:
+
 - Dynamic text generation
 - Noise and distortion layers
 - Hash-based validation
@@ -310,10 +334,10 @@ private generateCaptchaImage(text: string): void {
 
 ```typescript
 this.loginForm = this.fb.group({
-  userId: ['', [Validators.required, Validators.minLength(3)]],
-  password: ['', [Validators.required, Validators.minLength(6)]],
+  userId: ["", [Validators.required, Validators.minLength(3)]],
+  password: ["", [Validators.required, Validators.minLength(6)]],
   state: [null, Validators.required],
-  captcha: ['', [Validators.required, this.captchaValidator.bind(this)]]
+  captcha: ["", [Validators.required, this.captchaValidator.bind(this)]],
 });
 ```
 
@@ -349,20 +373,20 @@ export interface MenuItem {
 // Hierarchical menu with 3 levels
 menuItems = [
   {
-    icon: 'pi pi-folder',
-    label: 'Document Configuration',
+    icon: "pi pi-folder",
+    label: "Document Configuration",
     expanded: true,
     children: [
-      { label: 'Vahan Related', route: '/document-config' },
+      { label: "Vahan Related", route: "/document-config" },
       {
-        label: 'Permit Related',
+        label: "Permit Related",
         children: [
-          { label: 'Permit', route: '/permit-config' },
+          { label: "Permit", route: "/permit-config" },
           // nested children
-        ]
-      }
-    ]
-  }
+        ],
+      },
+    ],
+  },
 ];
 ```
 
@@ -377,6 +401,7 @@ menuItems = [
 ### 3. **Form Configuration System**
 
 Dynamic form builder with:
+
 - Dropdowns with search
 - Validation feedback
 - Alert notifications
@@ -443,11 +468,13 @@ dashboard/
 ## 🔄 State Management
 
 ### Current Approach
+
 - **Local Component State** - Most state is component-level
 - **Service Layer** - MenuService for shared menu state
 - **Reactive Forms** - Form state management via FormBuilder
 
 ### Data Flow
+
 ```
 User Input → Component → Service (if needed) → API Call → Update UI
 ```
@@ -459,18 +486,17 @@ User Input → Component → Service (if needed) → API Call → Update UI
 ```typescript
 export const routes: Routes = [
   // Lazy-loaded auth module
-  { 
-    path: 'auth', 
-    loadChildren: () => import('./auth/auth-module')
-      .then(m => m.AuthModule) 
+  {
+    path: "auth",
+    loadChildren: () => import("./auth/auth-module").then((m) => m.AuthModule),
   },
-  
+
   // Eagerly loaded dashboard routes
-  { path: 'document-config', component: DocumentConfigComponent },
-  { path: 'permit-config', component: PermitConfigComponent },
-  
+  { path: "document-config", component: DocumentConfigComponent },
+  { path: "permit-config", component: PermitConfigComponent },
+
   // Default redirect
-  { path: '', redirectTo: '/auth/login', pathMatch: 'full' }
+  { path: "", redirectTo: "/auth/login", pathMatch: "full" },
 ];
 ```
 
@@ -507,7 +533,7 @@ export const routes: Routes = [
   "development": {
     "optimization": false,
     "extractLicenses": false,
-    "sourceMap": true  // Debugging support
+    "sourceMap": true // Debugging support
   }
 }
 ```
@@ -527,6 +553,7 @@ export const routes: Routes = [
 ```
 
 ### Testing Tools
+
 - **Jasmine** - BDD testing framework
 - **Karma** - Test runner with Chrome launcher
 - **Coverage Reports** - karma-coverage
@@ -552,14 +579,15 @@ Project is prepared for i18n but not currently implemented.
 
 ```json
 {
-  "start": "ng serve",           // Development server
-  "build": "ng build",           // Production build
-  "watch": "ng build --watch",   // Watch mode
-  "test": "ng test"              // Run tests
+  "start": "ng serve", // Development server
+  "build": "ng build", // Production build
+  "watch": "ng build --watch", // Watch mode
+  "test": "ng test" // Run tests
 }
 ```
 
 ### Development Server
+
 - Default: `http://localhost:4200/`
 - Hot Module Replacement enabled
 - Auto-reload on file changes
@@ -569,6 +597,7 @@ Project is prepared for i18n but not currently implemented.
 ## 📦 Dependencies Analysis
 
 ### Production Dependencies (9)
+
 ```json
 {
   "@angular/animations": "^20.2.4",
@@ -578,7 +607,7 @@ Project is prepared for i18n but not currently implemented.
   "@angular/forms": "^20.0.0",
   "@angular/platform-browser": "^20.0.0",
   "@angular/router": "^20.0.0",
-  "primeicons": "^7.0.0",        // Only external UI library
+  "primeicons": "^7.0.0", // Only external UI library
   "rxjs": "~7.8.0",
   "tslib": "^2.3.0",
   "zone.js": "~0.15.0"
@@ -586,6 +615,7 @@ Project is prepared for i18n but not currently implemented.
 ```
 
 ### Dev Dependencies (11)
+
 - Angular CLI & Build tools
 - TypeScript compiler
 - Jasmine & Karma testing tools
@@ -609,60 +639,70 @@ Project is prepared for i18n but not currently implemented.
 ## 💡 Best Practices Implemented
 
 ### Code Quality
+
 ✅ **Strict TypeScript** - Type safety enforced  
 ✅ **Consistent Naming** - Clear, descriptive names  
 ✅ **Component Isolation** - Standalone components  
 ✅ **DRY Principle** - Reusable components  
-✅ **Single Responsibility** - Each component has one job  
+✅ **Single Responsibility** - Each component has one job
 
 ### Performance
+
 ✅ **Lazy Loading** - Reduce initial bundle size  
 ✅ **OnPush Change Detection** - Can be added for optimization  
 ✅ **Async Pipe** - Automatic subscription management  
-✅ **Tree Shaking** - Remove unused code  
+✅ **Tree Shaking** - Remove unused code
 
 ### Accessibility
+
 ✅ **Semantic HTML** - Proper elements  
 ✅ **ARIA Labels** - Screen reader support  
 ✅ **Keyboard Navigation** - Accessible via keyboard  
-✅ **Focus Management** - Clear focus indicators  
+✅ **Focus Management** - Clear focus indicators
 
 ### Styling
+
 ✅ **SCSS Variables** - Reusable color schemes  
 ✅ **Responsive Design** - Mobile-first approach  
 ✅ **Component Scoping** - No style leakage  
-✅ **Utility Classes** - Reusable helper classes  
+✅ **Utility Classes** - Reusable helper classes
 
 ---
 
 ## 🔮 Future Enhancement Opportunities
 
 ### 1. **State Management**
+
 - Consider NgRx or Akita for complex state
 - Implement caching strategies
 
 ### 2. **API Integration**
+
 - HTTP Interceptors for auth
 - Error handling service
 - Loading state management
 
 ### 3. **Progressive Web App (PWA)**
+
 - Service workers
 - Offline functionality
 - App manifest
 
 ### 4. **Advanced Features**
+
 - Real-time updates with WebSockets
 - File upload with progress
 - Advanced data tables
 - Charts and analytics
 
 ### 5. **Testing**
+
 - Unit test coverage > 80%
 - E2E tests with Playwright/Cypress
 - Visual regression testing
 
 ### 6. **Performance**
+
 - Implement OnPush change detection
 - Virtual scrolling for large lists
 - Image optimization
@@ -701,7 +741,7 @@ this.configForm = this.fb.group({
 });
 
 // Template validation display
-<small *ngIf="form.get('field')?.touched && form.get('field')?.invalid" 
+<small *ngIf="form.get('field')?.touched && form.get('field')?.invalid"
        class="error-message">
   Field is required
 </small>
@@ -712,12 +752,14 @@ this.configForm = this.fb.group({
 ## 🎓 Learning Resources
 
 ### Angular 20 Features Used
+
 - Standalone Components
 - Application Builder
 - Signal-based APIs (ready for future migration)
 - Modern dependency injection
 
 ### External Resources
+
 - [Angular Official Docs](https://angular.dev)
 - [PrimeIcons](https://primeng.org/icons)
 - [SCSS Documentation](https://sass-lang.com/)
@@ -752,5 +794,5 @@ The project is production-ready and follows industry standards for enterprise An
 
 **Document Version**: 1.0  
 **Last Updated**: 2025-10-09  
-**Author**: Project Analysis System  
+**Author**: Srichandan Mohapatra  
 **Project**: DMS Vahan - Ministry of Road Transport & Highways, Government of India
